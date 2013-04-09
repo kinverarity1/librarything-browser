@@ -1,0 +1,117 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+   <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+
+        <TextView
+            android:id="@+id/book_detail_title"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/details_ui_title_dummy"
+            android:textStyle="italic" />
+        <TextView
+            android:id="@+id/book_detail_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/details_ui_authors_dummy"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/book_detail_publication"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/details_ui_publication_preface"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/book_detail_collections_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/book_detail_tags_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/book_detail_date_entered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_date_entered_preface" />
+        
+        <TextView
+            android:id="@+id/book_detail_date_acquired"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_date_acquired_preface" />
+        
+        <TextView
+            android:id="@+id/book_detail_date_started"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_date_started_preface" />
+        
+        <TextView
+            android:id="@+id/book_detail_date_ended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_date_ended_preface" />
+        
+        <RatingBar
+            android:id="@+id/book_detail_rating_bar"
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5" />
+
+        <TextView
+            android:id="@+id/book_detail_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_review_preface" />
+        
+        <TextView
+            android:id="@+id/book_detail_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_comments_preface" />
+        
+        <TextView
+            android:id="@+id/book_detail_comments_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_private_comments_preface"
+            android:textSize="15sp"
+             />
+    </LinearLayout>
+
+</ScrollView>

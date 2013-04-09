@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menuSearch"
+        android:icon="@drawable/ic_menu_search"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_search" />
+    <item
+        android:id="@+id/menuTags"
+        android:icon="@drawable/ic_menu_tag"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_tags" />
+    <item
+        android:id="@+id/menuCollections"
+        android:icon="@drawable/ic_menu_collections"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_collections"/>
+    <item
+        android:id="@+id/menuAuthors"
+        android:icon="@drawable/ic_menu_authors"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_authors" />
+    <item
+        android:id="@+id/menuReviews"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_reviews" />
+    <item
+        android:id="@+id/menuComments"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_comments" />
+    
+	<item
+	    android:id="@+id/menuShowAllBooks"
+    	android:showAsAction="ifRoom"
+    	android:title="@string/menu_show_all_books" />
+    <item
+        android:id="@+id/menuImport"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/menu_download" />
+    <item
+        android:id="@+id/menuPreferences"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_settings" />
+    <item
+        android:id="@+id/menuDelete"
+        android:icon="@drawable/ic_menu_delete"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_delete" />
+</menu>

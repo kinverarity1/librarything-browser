@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/commentlist_item_title"
+            style="?android:attr/textAppearanceMedium"
+            android:textStyle="italic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6sp"
+            android:text="@string/details_ui_title_dummy" />
+        
+        <TextView
+            android:id="@+id/commentlist_item_author"
+            android:textSize="15sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#eeeeee"
+            android:text="@string/details_ui_title_dummy" />
+
+        <TextView
+            android:id="@+id/commentlist_item_comments"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6sp"
+            android:textColor="#dddddd"
+            android:text="@string/details_ui_authors_dummy" />
+        
+        <LinearLayout
+        android:id="@+id/commentlist_item_comments_private_vertical_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/commentlist_item_comments_private_left_icon"
+                android:layout_width="28sp"
+                android:layout_height="28sp"
+                android:src="@drawable/ic_lock_lock" />
+
+            <TextView
+                android:id="@+id/commentlist_item_comments_private"
+                style="?android:attr/textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3sp"
+                android:layout_marginBottom="3sp"
+                android:text="@string/details_ui_authors_dummy"
+                android:textColor="#cccccc" />
+        
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+</LinearLayout>

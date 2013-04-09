@@ -1,0 +1,14 @@
+LibraryThing Browser
+
+This is an experimental simple offline browser for LibraryThing users using
+Android devices. You can download your library and use it offline to search 
+and browse your books and reviews, but you can't edit the data. 
+ 
+I am not affiliated with LibraryThing in any way, just a keen user
+tinkering in my spare time.  
+ 
+Released under the MIT Expat Licence. 
+ 
+The ACCESS_NETWORK_STATE and INTERNET permissions are required in order to
+download your library from the LibraryThing website, and that is the only
+thing that network access is used for.

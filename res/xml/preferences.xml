@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!--
+         <CheckBoxPreference
+        android:summaryOn="Unread books are highlighted red"
+        android:summaryOff="Unread books are not specially highlighted"
+        android:enabled="true"
+        android:key="highlight_unread"
+        android:title="Highlight unread books" />
+    -->
+
+    <CheckBoxPreference
+        android:enabled="true"
+        android:key="search_publication"
+        android:summaryOff="@string/preferences_ui_search_publication_summary_off"
+        android:summaryOn="@string/preferences_ui_search_publication_summary_on"
+        android:title="@string/preferences_ui_search_publication_title" />
+
+    <PreferenceCategory android:title="@string/preferences_ui_lt_credentials" >
+    <EditTextPreference 
+        android:key="lt_username"
+        android:title="@string/preferences_ui_lt_username_title"
+        android:dialogTitle="@string/preferences_ui_lt_username_dialog_title"
+		android:hint="@string/preferences_ui_lt_username_hint"
+        android:summary="@string/preferences_ui_lt_username_summary" />
+    
+    <EditTextPreference
+        android:key="lt_password"
+        android:title="@string/preferences_ui_lt_password_title"
+        android:dialogTitle="@string/preferences_ui_lt_password_dialog_title"
+        android:inputType="textPassword"
+		android:hint="@string/preferences_ui_lt_password_hint"
+        android:summary="@string/preferences_ui_lt_password_summary" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/preferences_ui_details" >
+        <Preference
+            android:key="last_download"
+            android:summary="@string/preferences_ui_last_download_initial_summary"
+            android:title="@string/preferences_ui_last_download_title" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/preferences_ui_about" >
+        <Preference
+            android:key="about_version"
+            android:summary="@string/preferences_ui_no_affiliation"
+            android:title="@string/preferences_ui_version_unknown" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_ui_attributions" >
+        <Preference
+            android:key="attributions_jcsv"
+            android:summary="@string/preferences_ui_jcsv_licence"
+            android:title="@string/preferences_ui_jcsv" />
+        <Preference
+            android:key="attributions_launcher_icon"
+            android:summary="@string/preferences_ui_launcher_source"
+            android:title="@string/preferences_ui_launcher" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,605 @@
+package com.nietky.librarythingbrowser;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CursorAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.googlecode.jcsv.CSVStrategy;
+import com.googlecode.jcsv.reader.CSVEntryParser;
+import com.googlecode.jcsv.reader.CSVReader;
+import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
+
+public class BookListActivity extends ListActivity {
+
+    private static Intent intent;
+    public static final String MESSAGE_TABLE_NAME = "com.nietky.librarythingbrowser.TABLE_NAME";
+    private InputStreamReader inputStreamReader = null;
+    private static final String TAG = "BookListActivity";
+
+    public static final int RESULT_TAG_SELECT = 1;
+    public static final int RESULT_COLLECTION_SELECT = 2;
+    public static final int PROGRESS_LOGGED_IN = 3;
+    public static final int PROGRESS_SUCCESS = 4;
+    public static final int PROGRESS_LOGIN_FAIL = 5;
+
+    private Cursor cursor;
+    private ArrayList<Integer> _ids = new ArrayList<Integer>();
+    private SearchHandler searchHandler;
+    private BookListCursorAdapter adapter;
+    
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor prefsEdit;
+    
+    HttpContext localContext;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        String METHOD = "-onCreate(): ";
+        Log.d(TAG + METHOD, "start");
+        
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_list);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this
+                .getApplicationContext());
+        
+        CookieStore cookieStore = new BasicCookieStore();
+        localContext = new BasicHttpContext();
+        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+
+        searchHandler = new SearchHandler(this);
+        searchHandler.setIds();
+        setTitle(getString(R.string.topbar_allbooks));
+        
+        intent = getIntent();
+        String action = intent.getAction();
+        if (intent.hasExtra("ids")) {
+            Log.d(TAG + METHOD, "Intent.hasExtra('ids')");
+            searchHandler.setIds(intent.getStringExtra("ids"));
+        }
+        if (Intent.ACTION_VIEW.equals(action)) {
+            Log.d(TAG + METHOD, "Intent.ACTION_VIEW");
+            importData();
+        } else if (Intent.ACTION_SEARCH.equals(action)) {
+            Log.d(TAG + METHOD, "Intent.ACTION_SEARCH");
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            searchHandler.restrictByQuery(query);
+            setTitle(query);
+            loadList();
+        } else if (intent.hasExtra("tagName")) {
+            Log.d(TAG + METHOD, "Intent has an extra: tagName=" + intent.getStringExtra("tagName"));
+            String tag = intent.getStringExtra("tagName");
+            searchHandler.restrictByTag(tag);
+            setTitle(tag);
+            loadList();
+        } else if (intent.hasExtra("collectionName")) {
+            Log.d(TAG + METHOD, "Intent has an extra: collectionName=" + intent.getStringExtra("collectionName"));
+            String collection = intent.getStringExtra("collectionName");
+            searchHandler.restrictByCollection(collection);
+            setTitle(collection);
+            loadList();
+        } else if (intent.hasExtra("author1Name")) {
+            Log.d(TAG + METHOD, "Intent has an extra: author1Name=" + intent.getStringExtra("author1Name"));
+            loadList();
+        } else if (intent.hasExtra("downloadBooks")) {
+            Log.d(TAG + METHOD, "Intent has an extra downloadBooks");
+            downloadBooks();
+        } else {
+            Log.d(TAG + METHOD, "Intent.getAction() = " + intent.getAction());
+            Log.d(TAG + METHOD, "... I'm doing nothing with that.");
+            loadList();
+        }
+    }
+
+    public void onPause () {
+        super.onPause();
+        _ids = searchHandler.getIds();
+    }
+    
+    public void loadList() {
+        String METHOD = ":loadList(): ";
+        Log.d(TAG + METHOD, "start");
+        
+        cursor = searchHandler.getCursor();
+        
+        if (cursor.getCount() == 0) {
+            SearchHandler testSearchHandler = new SearchHandler(this);
+            testSearchHandler.setIds();
+            if (testSearchHandler.getIds().size() == 0) {
+                Intent in = new Intent(this, LoginActivity.class);
+                startActivity(in);
+            } else {
+                
+            }
+        }
+        
+        adapter = new BookListCursorAdapter(this, cursor);
+        setListAdapter(adapter);
+    }
+    
+    public void downloadBooks() {
+        String METHOD = ":downloadBooks(): ";
+        Log.d(TAG + METHOD, "start");
+        new LTLoginDownload().execute(null, null, null);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void importData() {
+        String METHOD = ":importData(): ";
+        Log.d(TAG + METHOD, "start");
+        
+        Uri uri = intent.getData();
+        Log.d(TAG, "Intent contains uri=" + uri);
+
+        // Date presentTime = Calendar.getInstance().getTime();
+        // SimpleDateFormat dateFormatter = new SimpleDateFormat(
+        // "yyyyMMddhhmmss");
+        // String newTableName = "booksFrom" +
+        // dateFormatter.format(presentTime);
+        // Log.d(TAG, "Intended table name=" + newTableName);
+
+        Log.d(TAG, "Opening InputStreamReader for " + uri + "...");
+        InputStream inputStream = null;
+        try {
+            inputStream = getContentResolver().openInputStream(uri);
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        Log.d(TAG, "Creating CSVReader...");
+        try {
+            inputStreamReader = new InputStreamReader(inputStream, "utf-16");
+        } catch (UnsupportedEncodingException e1) {
+            e1.printStackTrace();
+        }
+        
+        CSVReader<String[]> csvReader = new CSVReaderBuilder<String[]>(
+                inputStreamReader)
+                .strategy(new CSVStrategy('\t', '\b', '#', true, true))
+                .entryParser(new EntryParser()).build();
+
+        Log.d(TAG, "Reading csvData...");
+        List<String[]> csvData = null;
+        try {
+            csvData = csvReader.readAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Successfully read csvData");
+
+        ImportBooksTask task = new ImportBooksTask();
+        task.execute(csvData);
+    }
+
+    public class EntryParser implements CSVEntryParser<String[]> {
+        public String[] parseEntry(String... data) {
+            return data;
+        }
+    }
+
+    private class ImportBooksTask extends
+            AsyncTask<List<String[]>, Void, String> {
+        private ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            String METHOD = ":ImportBooksTask:onPreExecute(): ";
+            Log.d(TAG + METHOD, "start");
+            
+            dialog = new ProgressDialog(BookListActivity.this);
+            dialog.setTitle("Importing books...");
+            dialog.setMessage("This could take a few minutes.");
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+
+        @SuppressWarnings("static-access")
+        @Override
+        protected String doInBackground(List<String[]>... csvDatas) {
+            String METHOD = ":ImportBooksTask:doInBackground(...): ";
+            Log.d(TAG + METHOD, "start");
+            
+            List<String[]> csvData = csvDatas[0];
+            String newTableName = "books";
+            Log.d(TAG, "Opening " + newTableName + " in internal database...");
+            DbHelperNew dbHelper = new DbHelperNew(getApplicationContext());
+            dbHelper.open();
+            dialog.setMax(csvData.size());
+            dbHelper.Db.beginTransaction();
+            try {
+                for (int i = 0; i < csvData.size(); i++) {
+                    String[] csvRow = csvData.get(i);
+                    String[] csvRowShort = new String[csvRow.length - 1];
+                    for (int j = 0; j < (csvRowShort.length); j++) {
+                        csvRowShort[j] = csvRow[j];
+                    }
+                    dbHelper.addRow(csvRowShort);
+                    dbHelper.Db.yieldIfContendedSafely();
+                    dialog.setProgress(i);
+                }
+                dbHelper.Db.setTransactionSuccessful();
+            } finally {
+                dbHelper.Db.endTransaction();
+            }
+            dbHelper.close();
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            String METHOD = ":ImportBooksTask:onPostExecute(" + result + "): ";
+            Log.d(TAG + METHOD, "start");
+            
+            //dialog.dismiss();
+            Intent i = new Intent(getApplicationContext(), BookListActivity.class);
+            finish();
+            startActivity(i);
+        }
+    }
+
+    @Override
+    public void onListItemClick(ListView listView, View view, int position,
+            long id) {
+        String METHOD = ":onListItemClick(position=" + position + "): ";
+        Log.d(TAG + METHOD, "start");
+        
+        super.onListItemClick(listView, view, position, id);
+        cursor.moveToPosition(position);
+        String _id = cursor.getString(cursor.getColumnIndex("_id"));
+        Intent intent = new Intent(this, BookDetailActivity.class);
+        intent.putExtra("_id", _id);
+        startActivity(intent);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Place an action bar item for searching.
+        getMenuInflater().inflate(R.menu.options, menu);
+//        // MenuItem item = menu.add("Search");
+//        MenuItem item = menu.findItem(R.id.menuSearch);
+//        // item.setIcon(android.R.drawable.ic_menu_search);
+//        // item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+//        // SearchView sv = new SearchView(this);
+//        // sv.setOnQueryTextListener(this);
+//        // item.setActionView(sv);
+//        //
+        return true;
+    }
+    
+    public boolean launchedAsQuery () {
+        intent = getIntent();
+        if (intent.hasExtra("ids")) return true;
+        else if (intent.hasExtra("tagName")) return true;
+        else if (intent.hasExtra("collectionName")) return true;
+        else if (intent.hasExtra("author1Name")) return true;
+        return false;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+//        menu.findItem(R.id.menuShowAllBooks).setVisible(launchedAsQuery());
+        return true;
+    }
+
+    @SuppressWarnings("unused")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menuPreferences:
+            goToPreferences();
+            return true;
+        case R.id.menuSearch:
+            this.onSearchRequested();
+            return true;
+        case R.id.menuDelete:
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Delete books")
+                    .setMessage(
+                            "Are you sure you want to delete all your books?\n\n(This is only for data imported into LibraryThing Browser on your device, and cannot affect your LibraryThing account).")
+                    .setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int which) {
+                                    String tableName = "books";
+                                    DbHelperNew dbHelper = new DbHelperNew(
+                                            getApplicationContext());
+                                    dbHelper.delete();
+                                    loadList();
+                                }
+
+                            }).setNegativeButton("No", null).show();
+            return true;
+        case R.id.menuShowAllBooks:
+            startActivity(new Intent(this, BookListActivity.class));
+            return true;
+        case R.id.menuTags:
+            startActivityWithIds(new Intent(this, TagListActivity.class));
+            return true;
+        case R.id.menuCollections:
+            startActivityWithIds(new Intent(this, CollectionListActivity.class));
+            return true;
+        case R.id.menuAuthors:
+            startActivityWithIds(new Intent(this, AuthorListActivity.class));
+            return true;
+//        case R.id.menuSort:
+//            final CharSequence[] items = {"title", "author1", "author2"};
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Sort by");
+//            builder.setItems(items, new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int item) {
+//                    orderByColumn = items[item].toString();
+//                    loadList();
+//                    dialog.dismiss();
+//                }
+//            });
+//            AlertDialog alert = builder.create();
+//            alert.show();
+//            return true;
+        case R.id.menuImport:
+            downloadBooks();
+            return true;
+        case R.id.menuReviews:
+            startActivityWithIds(new Intent(this, ReviewListActivity.class));
+            return true;
+        case R.id.menuComments:
+            startActivityWithIds(new Intent(this, CommentListActivity.class));
+            return true;
+        default:
+            return false;
+        }
+    }
+    
+    public void startActivityWithIds (Intent intent) {
+        intent.putExtra("ids", searchHandler.getString());
+        startActivity(intent);
+    }
+
+    public void importBooksFromDownload(String downloadedContent) {
+        InputStream is = new ByteArrayInputStream(downloadedContent.getBytes());
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        CSVReader<String[]> csvReader = new CSVReaderBuilder<String[]>(
+                br)
+                .strategy(new CSVStrategy('\t', '\b', '#', true, true))
+                .entryParser(new EntryParser()).build();
+
+        Log.d(TAG, "Reading downloadedContent...");
+        List<String[]> csvData = null;
+        try {
+            csvData = csvReader.readAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Successfully read downloadedContent");
+
+        ImportBooksTask task = new ImportBooksTask();
+        task.execute(csvData);
+        
+        prefsEdit = sharedPref.edit();
+        String s = SimpleDateFormat.getDateTimeInstance().format(new Date());
+        prefsEdit.putString("last_download_summary", "Most recent: " + s);
+        prefsEdit.commit();
+    }
+    
+    private class LTLoginDownload extends AsyncTask<Boolean, Integer, String> {
+        String result;
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            String METHOD = ":LTLoginDownload:onPreExecute(): ";
+            Log.d(TAG + METHOD, "start");
+            
+            dialog = new ProgressDialog(BookListActivity.this);
+            dialog.setTitle("Downloading library...");
+            dialog.setMessage("Logging in...");
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+        }
+        
+        protected void onProgressUpdate(Integer... progUpdate) {
+            if (progUpdate[0] == PROGRESS_LOGGED_IN){  
+               dialog.setMessage("Successfully logged in. Now downloading your library.");
+               if (!sharedPref.getBoolean("lt_remember_credentials", false)) {
+                   prefsEdit = sharedPref.edit();
+                   prefsEdit.putString("lt_username", "");
+                   prefsEdit.putString("lt_password", "");
+                   prefsEdit.commit();
+               }
+           } else if (progUpdate[0] == PROGRESS_SUCCESS) {
+               dialog.setMessage("Successfull! Let's import your books.");
+           } else if (progUpdate[0] == PROGRESS_LOGIN_FAIL) {
+               dialog.setMessage("Login failed.");
+               dialog.dismiss();
+               Intent in = new Intent(getApplicationContext(), LoginActivity.class);
+               startActivity(in);
+           }
+        }
+        
+        protected String doInBackground(Boolean... bools) {
+            String METHOD = ":LTLoginDownload:doInBackground()";
+            Log.d(TAG + METHOD, "start");
+            
+            HttpClient client = new DefaultHttpClient();
+            HttpPost loginPost = new HttpPost(
+                    "http://www.librarything.com/enter/start");
+
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+            nameValuePairs
+            .add(new BasicNameValuePair("formusername", sharedPref.getString("lt_username", "")));
+            nameValuePairs.add(new BasicNameValuePair("formpassword",
+                    sharedPref.getString("lt_password", "")));
+            nameValuePairs.add(new BasicNameValuePair("index_signin_already",
+                    "Sign in"));
+            try {
+                loginPost.setEntity(new UrlEncodedFormEntity(nameValuePairs,
+                        HTTP.UTF_8));
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            HttpResponse loginResponse = null;
+            try {
+                loginResponse = client.execute(loginPost, localContext);
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            String loginResponseBody = "";
+            try {
+                loginResponseBody = EntityUtils.toString(loginResponse.getEntity());
+            } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            if (!loginResponseBody.contains("Your collections")) {
+                this.publishProgress(PROGRESS_LOGIN_FAIL);
+                this.cancel(true);
+                loginPost.abort();
+            } else {
+                this.publishProgress(PROGRESS_LOGGED_IN);
+            }
+            
+            HttpGet downloadRequest = new HttpGet(
+                    "http://www.librarything.com/export-tab");
+            HttpResponse downloadResponse = null;
+            try {
+                downloadResponse = client.execute(downloadRequest,
+                        localContext);
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            Log.d(TAG + METHOD, downloadResponse.getStatusLine().toString());
+            String downloadResponseBody = "";
+            try {
+                downloadResponseBody = EntityUtils.toString(downloadResponse
+                        .getEntity());
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            result = downloadResponseBody;
+            DbHelperNew dbHelper = new DbHelperNew(getApplicationContext());
+            dbHelper.delete();
+            this.publishProgress(PROGRESS_SUCCESS);
+            return "";
+
+        }
+
+        protected void onPostExecute(String r) {
+            String METHOD = ":LTLoginDownload:onPostExecute()";
+            Log.d(TAG + METHOD, "start");
+            importBooksFromDownload(result);
+        }
+
+    }
+    
+    public void goToPreferences() {
+        Log.d("blf", "opening application settings");
+        Intent i = new Intent(this, PreferencesActivity.class);
+        startActivity(i);
+    }
+
+    public class BookListCursorAdapter extends CursorAdapter {
+        LayoutInflater inflater;
+        @SuppressWarnings("deprecation")
+        public BookListCursorAdapter(Context context, Cursor c) {
+            super(context, c);
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            TextView titleTV = (TextView) view
+                    .findViewById(R.id.book_list_item_title);
+            TextView subTitleTV = (TextView) view
+                    .findViewById(R.id.book_list_item_subtitle);
+            titleTV.setText(FormatText.asHtml(cursor.getString(cursor.getColumnIndex("title"))));
+            subTitleTV.setText(FormatText.asHtml(cursor.getString(cursor
+                    .getColumnIndex("author2"))));
+            // if
+            // (cursor.getString(cursor.getColumnIndex("tags")).contains("unread"))
+            // {
+            // view.setBackgroundColor(Color.GRAY);
+            // } else
+            // view.setBackgroundColor(Color.BLACK);
+        }
+
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return inflater.inflate(R.layout.book_list_item, parent, false);
+        }
+    }
+}

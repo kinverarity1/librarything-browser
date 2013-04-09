@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nietky.librarythingbrowser"
+    android:versionCode="15"
+    android:versionName="1.5.1" >
+
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon2"
+        android:label="@string/app_name" >
+        <activity
+            android:name="com.nietky.librarythingbrowser.BookListActivity"
+            android:label="LibraryThing Browser" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter android:label="LibraryThingBrowser import" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/*" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.BookDetailActivity"
+            android:label="@string/title_book_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.TagListActivity"
+            android:label="@string/title_activity_tag_list"
+            android:parentActivityName=".BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.CollectionListActivity"
+            android:label="@string/title_activity_collection_list"
+            android:parentActivityName=".BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.AuthorListActivity"
+            android:label="@string/title_activity_author_list"
+            android:parentActivityName=".BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.PreferencesActivity"
+            android:label="@string/title_activity_preferences"
+            android:parentActivityName=".BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.ReviewListActivity"
+            android:label="@string/title_activity_review_list"
+            android:parentActivityName="com.nietky.librarythingbrowser.BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nietky.librarythingbrowser.BookListActivity" />
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.CommentListActivity"
+            android:label="@string/title_activity_comment_list"
+            android:parentActivityName="com.nietky.librarythingbrowser.BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nietky.librarythingbrowser.BookListActivity" />
+        </activity>
+    </application>
+
+</manifest>
