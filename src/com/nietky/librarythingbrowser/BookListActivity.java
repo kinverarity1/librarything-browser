@@ -85,7 +85,7 @@ public class BookListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String METHOD = "-onCreate(): ";
-        Log.d(TAG + METHOD, "start");
+//        Log.d(TAG + METHOD, "start");
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
@@ -110,32 +110,34 @@ public class BookListActivity extends ListActivity {
             Log.d(TAG + METHOD, "Intent.ACTION_VIEW");
             importData();
         } else if (Intent.ACTION_SEARCH.equals(action)) {
-            Log.d(TAG + METHOD, "Intent.ACTION_SEARCH");
             String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d(TAG + METHOD, "Intent.ACTION_SEARCH query=" + query);
             searchHandler.restrictByQuery(query);
             setTitle(query);
             loadList();
         } else if (intent.hasExtra("tagName")) {
-            Log.d(TAG + METHOD, "Intent has an extra: tagName=" + intent.getStringExtra("tagName"));
             String tag = intent.getStringExtra("tagName");
+            Log.d(TAG + METHOD, "Intent has an extra: tagName=" + tag);
             searchHandler.restrictByTag(tag);
             setTitle(tag);
             loadList();
         } else if (intent.hasExtra("collectionName")) {
-            Log.d(TAG + METHOD, "Intent has an extra: collectionName=" + intent.getStringExtra("collectionName"));
             String collection = intent.getStringExtra("collectionName");
+            Log.d(TAG + METHOD, "Intent has an extra: collectionName=" + collection);
             searchHandler.restrictByCollection(collection);
             setTitle(collection);
             loadList();
-        } else if (intent.hasExtra("author1Name")) {
-            Log.d(TAG + METHOD, "Intent has an extra: author1Name=" + intent.getStringExtra("author1Name"));
+        } else if (intent.hasExtra("authorName")) {
+            String author = intent.getStringExtra("authorName");
+            Log.d(TAG + METHOD, "Intent has an extra: authorName=" + author);
+            searchHandler.restrictByAuthor(author);
+            setTitle(author);
             loadList();
         } else if (intent.hasExtra("downloadBooks")) {
-            Log.d(TAG + METHOD, "Intent has an extra downloadBooks");
+            Log.d(TAG + METHOD, "Intent has an extra: downloadBooks");
             downloadBooks();
         } else {
-            Log.d(TAG + METHOD, "Intent.getAction() = " + intent.getAction());
-            Log.d(TAG + METHOD, "... I'm doing nothing with that.");
+            Log.d(TAG + METHOD, "Intent.getAction() = " + intent.getAction() + "... ignoring.");
             loadList();
         }
     }
@@ -178,7 +180,7 @@ public class BookListActivity extends ListActivity {
         Log.d(TAG + METHOD, "start");
         
         Uri uri = intent.getData();
-        Log.d(TAG, "Intent contains uri=" + uri);
+//        Log.d(TAG, "Intent contains uri=" + uri);
 
         // Date presentTime = Calendar.getInstance().getTime();
         // SimpleDateFormat dateFormatter = new SimpleDateFormat(
@@ -187,7 +189,7 @@ public class BookListActivity extends ListActivity {
         // dateFormatter.format(presentTime);
         // Log.d(TAG, "Intended table name=" + newTableName);
 
-        Log.d(TAG, "Opening InputStreamReader for " + uri + "...");
+//        Log.d(TAG, "Opening InputStreamReader for " + uri + "...");
         InputStream inputStream = null;
         try {
             inputStream = getContentResolver().openInputStream(uri);
@@ -195,7 +197,7 @@ public class BookListActivity extends ListActivity {
             e1.printStackTrace();
         }
 
-        Log.d(TAG, "Creating CSVReader...");
+//        Log.d(TAG, "Creating CSVReader...");
         try {
             inputStreamReader = new InputStreamReader(inputStream, "utf-16");
         } catch (UnsupportedEncodingException e1) {

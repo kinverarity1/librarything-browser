@@ -37,24 +37,26 @@ public class CollectionListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 String collection = collections.get(position);
-                Intent resultIntent = new Intent(parent.getContext(), BookListActivity.class);
-                resultIntent.putExtra("collectionName", collection);
-                startActivity(resultIntent);
+                Intent intent = new Intent(parent.getContext(), BookListActivity.class);
+                intent.putExtra("collectionName", collection);
+                // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
+                intent.putExtra("ids", getIds());
+                startActivity(intent);
             }
         });
     }
-    
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        // String selection = l.getItemAtPosition(position).toString();
-        String collection = collections.get(position);
-        Intent intent = new Intent(this, BookListActivity.class);
-        intent.putExtra("collectionName", collection);
-
-        // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
-        intent.putExtra("ids", getIds());
-        
-        startActivity(intent);
-    }
+//    
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        // String selection = l.getItemAtPosition(position).toString();
+//        String collection = collections.get(position);
+//        Intent intent = new Intent(this, BookListActivity.class);
+//        intent.putExtra("collectionName", collection);
+//
+//        // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
+//        intent.putExtra("ids", getIds());
+//        
+//        startActivity(intent);
+//    }
     
     protected String getIds() {
         return searchHandler.getString();

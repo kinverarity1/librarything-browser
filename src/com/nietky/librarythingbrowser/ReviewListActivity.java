@@ -79,7 +79,7 @@ public class ReviewListActivity extends Activity {
             
             for (int i = 0; i < fieldnames.length; i += 1) {
                 fieldname = fieldnames[i];
-                Log.d(TAG, "Getting content for fieldname=" + fieldname);
+//                Log.d(TAG, "Getting content for fieldname=" + fieldname);
                 int index = cursor.getColumnIndex(fieldname);
                 String content = "";
                 if (index > -1)

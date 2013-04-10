@@ -16,6 +16,14 @@
         android:summaryOff="@string/preferences_ui_search_publication_summary_off"
         android:summaryOn="@string/preferences_ui_search_publication_summary_on"
         android:title="@string/preferences_ui_search_publication_title" />
+    
+    <CheckBoxPreference
+        android:enabled="true"
+    	android:key="case_sensitive_search"
+    	android:summaryOff="@string/prefs_ui_case_sensitive_search_summary_off"
+    	android:summaryOn="@string/prefs_ui_case_sensitive_search_summary_on"
+    	android:title="@string/prefs_ui_case_sensitive_search_title" />
+    
 
     <PreferenceCategory android:title="@string/preferences_ui_lt_credentials" >
     <EditTextPreference 

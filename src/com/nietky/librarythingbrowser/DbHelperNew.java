@@ -130,8 +130,9 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 sql += ")";
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
-                    cursor.moveToNext();
+                    cursor.moveToFirst();
                 }
+                Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {
                 Log.e(TAG, "getTestData >>" + mSQLException.toString());
@@ -155,6 +156,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
             _ids.add(cursor.getInt(cursor.getColumnIndex("_id")));
             cursor.moveToNext();
         }
+        Log.d(TAG + METHOD, "returning " + _ids.size() + " ids");
         return _ids;
     }
     

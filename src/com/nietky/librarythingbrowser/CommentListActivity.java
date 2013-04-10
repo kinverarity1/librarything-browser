@@ -37,7 +37,6 @@ public class CommentListActivity extends Activity {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviewlist);
-        setupActionBar();
         
         listView = (ListView) findViewById(R.id.reviewListView);
         Intent intent = getIntent();
@@ -87,7 +86,7 @@ public class CommentListActivity extends Activity {
             
             for (int i = 0; i < fieldnames.length; i += 1) {
                 fieldname = fieldnames[i];
-                Log.d(TAG, "Getting content for fieldname=" + fieldname);
+//                Log.d(TAG, "Getting content for fieldname=" + fieldname);
                 int index = cursor.getColumnIndex(fieldname);
                 String content = "";
                 if (index > -1)
@@ -112,12 +111,12 @@ public class CommentListActivity extends Activity {
             
             String comments = cursor.getString(cursor.getColumnIndex("comments"));
             String comments_private = cursor.getString(cursor.getColumnIndex("comments_private"));
-            if (!comments.trim().isEmpty()) {
+            if (comments.trim().length() > 0) {
                 commentsText.setText(FormatText.asHtml(comments));
             } else {
                 commentsText.setVisibility(commentsText.INVISIBLE);
             }
-            if (!comments_private.trim().isEmpty()) {
+            if (comments_private.trim().length() > 0) {
                 commentsPrivateText.setText(FormatText.asHtml(comments_private));
             } else {
                 commentsPrivateText.setVisibility(commentsPrivateText.INVISIBLE);
@@ -138,15 +137,6 @@ public class CommentListActivity extends Activity {
         }
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

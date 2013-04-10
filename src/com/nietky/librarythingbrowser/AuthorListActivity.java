@@ -15,6 +15,8 @@ import android.widget.ListView;
 public class AuthorListActivity extends Activity {
     ArrayList<String> authors;
     ListView listView;
+    
+    SearchHandler searchHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,9 @@ public class AuthorListActivity extends Activity {
         listView = (ListView) findViewById(R.id.authorListView);
 
         Intent intent = getIntent();
-//        authors = CursorTags.getAuthors1(cursor);
+        searchHandler = new SearchHandler(this);
+        searchHandler.setIds(intent.getStringExtra("ids"));
+        authors = CursorTags.getAuthors1(searchHandler.getCursor());
         Collections.sort(authors, String.CASE_INSENSITIVE_ORDER);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, authors);
@@ -36,11 +40,18 @@ public class AuthorListActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 String author = authors.get(position);
-                Intent resultIntent = new Intent(parent.getContext(), BookListActivity.class);
-                resultIntent.putExtra("author1Name", author);
-                startActivity(resultIntent);
+                Intent intent = new Intent(parent.getContext(), BookListActivity.class);
+                intent.putExtra("authorName", author);
+                // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
+                intent.putExtra("ids", getIds());
+                startActivity(intent);
             }
         });
 
+    }
+    
+
+    protected String getIds() {
+        return searchHandler.getString();
     }
 }

@@ -55,6 +55,9 @@
     <string name="preferences_ui_jcsv_licence">Apache Licence 2.0</string>
     <string name="preferences_ui_launcher">Launcher icon</string>
     <string name="preferences_ui_launcher_source">The Noun Project (http://www.thenounproject.com)</string>
+    <string name="prefs_ui_case_sensitive_search_summary_off">Search queries are not case-sensitive</string>
+    <string name="prefs_ui_case_sensitive_search_summary_on">Search queries are case-sensitive</string>
+    <string name="prefs_ui_case_sensitive_search_title">Case sensitive search</string>
     <string name="menu_search">Search</string>
     <string name="menu_tags">Tags</string>
     <string name="menu_collections">Collections</string>

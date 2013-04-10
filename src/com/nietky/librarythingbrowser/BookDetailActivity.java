@@ -33,6 +33,7 @@ public class BookDetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String METHOD = "-onCreate():";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
 
@@ -44,7 +45,7 @@ public class BookDetailActivity extends Activity {
         dbHelper.open();
         cursor = dbHelper.getRow(id);
         cursor.moveToFirst();
-        Log.d(TAG, "getting Row id=" + id);
+        Log.d(TAG + METHOD, "Loading _id=" + id);
 
         fields = new HashMap<String, String>();
 
@@ -58,7 +59,7 @@ public class BookDetailActivity extends Activity {
                 "encoding" };
         for (int i = 0; i < fieldnames.length; i += 1) {
             fieldname = fieldnames[i];
-            Log.d(TAG, "Getting content for fieldname=" + fieldname);
+//            Log.d(TAG, "Getting content for fieldname=" + fieldname);
             int index = cursor.getColumnIndex(fieldname);
             String content = "";
             if (index > -1)
