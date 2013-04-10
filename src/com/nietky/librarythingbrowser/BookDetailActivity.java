@@ -110,10 +110,11 @@ public class BookDetailActivity extends Activity {
             public void onClick(View v) {
                 TextView self = (TextView) v;
                 String author = (String) self.getTag();
-                Intent resultIntent = new Intent(context,
-                        BookListActivity.class);
-                resultIntent.putExtra("author1Name", author);
-                startActivity(resultIntent);
+                Intent intent = new Intent(context, BookListActivity.class);
+                intent.putExtra("authorName", author);
+//                // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
+//                intent.putExtra("ids", getIds());
+                startActivity(intent);
             }
         });
 

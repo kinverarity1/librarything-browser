@@ -68,8 +68,8 @@
     <string name="menu_show_all_books">Show all books</string>
     <string name="title_activity_review_list">List of reviews</string>
     <string name="reviews_ui_title">List of reviews</string>
-    <string name="menu_reviews">Your reviews</string>
-    <string name="menu_comments">Your comments</string>
+    <string name="menu_reviews">Reviews</string>
+    <string name="menu_comments">Comments</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="topbar_allbooks">All books</string>

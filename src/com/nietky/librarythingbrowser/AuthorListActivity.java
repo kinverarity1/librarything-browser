@@ -34,7 +34,7 @@ public class AuthorListActivity extends Activity {
                 android.R.layout.simple_list_item_1, authors);
 
         listView.setAdapter(adapter);
-        setTitle(getString(R.string.title_activity_collection_list) + " (" + authors.size() + "):");
+        setTitle(getString(R.string.title_activity_author_list) + " (" + authors.size() + "):");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

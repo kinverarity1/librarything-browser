@@ -324,7 +324,7 @@ public class BookListActivity extends ListActivity {
         if (intent.hasExtra("ids")) return true;
         else if (intent.hasExtra("tagName")) return true;
         else if (intent.hasExtra("collectionName")) return true;
-        else if (intent.hasExtra("author1Name")) return true;
+        else if (intent.hasExtra("authorName")) return true;
         return false;
     }
     

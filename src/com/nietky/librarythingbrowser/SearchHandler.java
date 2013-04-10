@@ -23,17 +23,25 @@ public class SearchHandler {
         Log.d(TAG + METHOD, "start");
         
         _context = context;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());      
+        _ids = new ArrayList<Integer> ();
+    }
+    
+    public void openDbHelper() {
         dbHelper = new DbHelperNew(_context.getApplicationContext());
         dbHelper.open();
-        
-        _ids = new ArrayList<Integer> ();
+    }
+    
+    public void closeDbHelper() {
+        dbHelper.close();
     }
     
     public void setIds () {
         String METHOD = "-setIds() [all]";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        openDbHelper();
         _ids = dbHelper.getAllIds();
+        closeDbHelper();
     }
     
     public void setIds (String commaSeparatedIds) {
@@ -72,7 +80,7 @@ public class SearchHandler {
     public Cursor getCursor() {
         String METHOD = ".getCursor(): ";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
-        
+        openDbHelper();
         return dbHelper.getIds(_ids);
     }
     
