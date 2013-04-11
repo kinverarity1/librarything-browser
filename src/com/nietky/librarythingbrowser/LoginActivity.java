@@ -1,12 +1,15 @@
 package com.nietky.librarythingbrowser;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -49,7 +52,25 @@ public class LoginActivity extends Activity {
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
+    
+    @SuppressWarnings("unused")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.menuPreferences:
+            goToPreferences();
+            return true;
+        default:
+            return false;
+        }
+    }
 
+    public void goToPreferences() {
+        String METHOD = ".goToPreferences()";
+        Intent i = new Intent(this, PreferencesActivity.class);
+        startActivity(i);
+    }
+    
     public void downloadLibrary (View view) {
         String METHOD = ":downloadLibrary(): ";
         Log.d(TAG + METHOD, "start");

@@ -99,6 +99,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nietky.librarythingbrowser.BookListActivity" />
         </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.DebugLog"
+            android:label="@string/title_activity_debug_log"
+            android:parentActivityName="com.nietky.librarythingbrowser.PreferencesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nietky.librarythingbrowser.PreferencesActivity" /><intent-filter>
+           <action android:name="com.nietky.librarythingbrowser.DebugLog" />
+           <category android:name="android.intent.category.DEFAULT" />
+       </intent-filter>
+        </activity>
     </application>
 
 </manifest>

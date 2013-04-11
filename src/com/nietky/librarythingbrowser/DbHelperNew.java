@@ -89,9 +89,9 @@ public class DbHelperNew extends SQLiteOpenHelper {
 
     public void addRow(String[] values) {
         String METHOD = ".addRow: ";
-        Log.d(TAG + METHOD, "start");
+//        Log.d(TAG + METHOD, "start");
         
-        Log.d(TAG, KEYS.length + " key labels; " + values.length + " values.");
+//        Log.d(TAG, KEYS.length + " key labels; " + values.length + " values.");
         ContentValues cvalues = new ContentValues();
         for (int i = 0; i < values.length; i++)
             cvalues.put(KEYS[i], values[i]);

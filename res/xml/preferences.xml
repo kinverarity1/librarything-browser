@@ -7,7 +7,7 @@
         android:summaryOff="Unread books are not specially highlighted"
         android:enabled="true"
         android:key="highlight_unread"
-        android:title="Highlight unread books" />
+        android:title="Highlight unread books" />
     -->
 
     <CheckBoxPreference
@@ -16,39 +16,58 @@
         android:summaryOff="@string/preferences_ui_search_publication_summary_off"
         android:summaryOn="@string/preferences_ui_search_publication_summary_on"
         android:title="@string/preferences_ui_search_publication_title" />
-    
     <CheckBoxPreference
         android:enabled="true"
-    	android:key="case_sensitive_search"
-    	android:summaryOff="@string/prefs_ui_case_sensitive_search_summary_off"
-    	android:summaryOn="@string/prefs_ui_case_sensitive_search_summary_on"
-    	android:title="@string/prefs_ui_case_sensitive_search_title" />
-    
+        android:key="case_sensitive_search"
+        android:summaryOff="@string/prefs_ui_case_sensitive_search_summary_off"
+        android:summaryOn="@string/prefs_ui_case_sensitive_search_summary_on"
+        android:title="@string/prefs_ui_case_sensitive_search_title" />
 
     <PreferenceCategory android:title="@string/preferences_ui_lt_credentials" >
-    <EditTextPreference 
-        android:key="lt_username"
-        android:title="@string/preferences_ui_lt_username_title"
-        android:dialogTitle="@string/preferences_ui_lt_username_dialog_title"
-		android:hint="@string/preferences_ui_lt_username_hint"
-        android:summary="@string/preferences_ui_lt_username_summary" />
-    
-    <EditTextPreference
-        android:key="lt_password"
-        android:title="@string/preferences_ui_lt_password_title"
-        android:dialogTitle="@string/preferences_ui_lt_password_dialog_title"
-        android:inputType="textPassword"
-		android:hint="@string/preferences_ui_lt_password_hint"
-        android:summary="@string/preferences_ui_lt_password_summary" />
+        <EditTextPreference
+            android:dialogTitle="@string/preferences_ui_lt_username_dialog_title"
+            android:hint="@string/preferences_ui_lt_username_hint"
+            android:key="lt_username"
+            android:summary="@string/preferences_ui_lt_username_summary"
+            android:title="@string/preferences_ui_lt_username_title" />
+        <EditTextPreference
+            android:dialogTitle="@string/preferences_ui_lt_password_dialog_title"
+            android:hint="@string/preferences_ui_lt_password_hint"
+            android:inputType="textPassword"
+            android:key="lt_password"
+            android:summary="@string/preferences_ui_lt_password_summary"
+            android:title="@string/preferences_ui_lt_password_title" />
     </PreferenceCategory>
-    
     <PreferenceCategory android:title="@string/preferences_ui_details" >
         <Preference
             android:key="last_download"
             android:summary="@string/preferences_ui_last_download_initial_summary"
             android:title="@string/preferences_ui_last_download_title" />
     </PreferenceCategory>
-    
+    <PreferenceCategory android:title="Debugging" >
+        <CheckBoxPreference
+            android:enabled="true"
+            android:defaultValue="false"
+            android:key="log_flag"
+            android:summaryOff="Logging is disabled"
+            android:summaryOn="Logging is enabled"
+            android:title="Log activity" />
+
+        <PreferenceScreen
+            android:summary="@string/prefs_ui_debug_log_summary"
+            android:title="@string/title_activity_debug_log" >
+            <intent android:action="com.nietky.librarythingbrowser.DebugLog" />
+        </PreferenceScreen>
+        
+        <EditTextPreference
+            android:title="Max. chars in log"
+            android:summary="Maximum number of characters in the log"
+            android:dialogTitle="Max. characters in log"
+           	android:key="max_log"
+           	android:defaultValue="1000000"
+           	android:inputType="numberSigned"
+           	/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_ui_about" >
         <Preference
             android:key="about_version"

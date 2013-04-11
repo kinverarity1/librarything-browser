@@ -78,5 +78,9 @@
     <string name="topbar_collection">Collection</string>
     <string name="topbar_author">Author</string>
     <string name="title_activity_comment_list">List of comments</string>
-	<string name="comments_ui_title">List of comments</string>
+    <string name="comments_ui_title">List of comments</string>
+    <string name="debug_log">None</string>
+    <string name="title_activity_debug_log">View log</string>
+    <string name="prefs_ui_debug_log_summary">View or send log to developer</string>
+
 </resources>

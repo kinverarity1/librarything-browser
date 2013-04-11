@@ -52,7 +52,6 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.googlecode.jcsv.CSVStrategy;
 import com.googlecode.jcsv.reader.CSVEntryParser;
@@ -61,6 +60,8 @@ import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 
 public class BookListActivity extends ListActivity {
 
+    public static LogHandler logger;
+    
     private static Intent intent;
     public static final String MESSAGE_TABLE_NAME = "com.nietky.librarythingbrowser.TABLE_NAME";
     private InputStreamReader inputStreamReader = null;
@@ -85,12 +86,13 @@ public class BookListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String METHOD = "-onCreate(): ";
-//        Log.d(TAG + METHOD, "start");
+//        logger.log(TAG + METHOD, "start");
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this
                 .getApplicationContext());
+        logger = new LogHandler(sharedPref);
         
         CookieStore cookieStore = new BasicCookieStore();
         localContext = new BasicHttpContext();
@@ -103,41 +105,41 @@ public class BookListActivity extends ListActivity {
         intent = getIntent();
         String action = intent.getAction();
         if (intent.hasExtra("ids")) {
-            Log.d(TAG + METHOD, "Intent.hasExtra('ids')");
+            logger.log(TAG + METHOD, "Intent.hasExtra('ids')");
             searchHandler.setIds(intent.getStringExtra("ids"));
         }
         if (Intent.ACTION_VIEW.equals(action)) {
-            Log.d(TAG + METHOD, "Intent.ACTION_VIEW");
+            logger.log(TAG + METHOD, "Intent.ACTION_VIEW");
             importData();
         } else if (Intent.ACTION_SEARCH.equals(action)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.d(TAG + METHOD, "Intent.ACTION_SEARCH query=" + query);
+            logger.log(TAG + METHOD, "Intent.ACTION_SEARCH query=" + query);
             searchHandler.restrictByQuery(query);
             setTitle(query);
             loadList();
         } else if (intent.hasExtra("tagName")) {
             String tag = intent.getStringExtra("tagName");
-            Log.d(TAG + METHOD, "Intent has an extra: tagName=" + tag);
+            logger.log(TAG + METHOD, "Intent has an extra: tagName=" + tag);
             searchHandler.restrictByTag(tag);
             setTitle(tag);
             loadList();
         } else if (intent.hasExtra("collectionName")) {
             String collection = intent.getStringExtra("collectionName");
-            Log.d(TAG + METHOD, "Intent has an extra: collectionName=" + collection);
+            logger.log(TAG + METHOD, "Intent has an extra: collectionName=" + collection);
             searchHandler.restrictByCollection(collection);
             setTitle(collection);
             loadList();
         } else if (intent.hasExtra("authorName")) {
             String author = intent.getStringExtra("authorName");
-            Log.d(TAG + METHOD, "Intent has an extra: authorName=" + author);
+            logger.log(TAG + METHOD, "Intent has an extra: authorName=" + author);
             searchHandler.restrictByAuthor(author);
             setTitle(author);
             loadList();
         } else if (intent.hasExtra("downloadBooks")) {
-            Log.d(TAG + METHOD, "Intent has an extra: downloadBooks");
+            logger.log(TAG + METHOD, "Intent has an extra: downloadBooks");
             downloadBooks();
         } else {
-            Log.d(TAG + METHOD, "Intent.getAction() = " + intent.getAction() + "... ignoring.");
+            logger.log(TAG + METHOD, "Intent.getAction() = " + intent.getAction() + "... ignoring.");
             loadList();
         }
     }
@@ -149,7 +151,7 @@ public class BookListActivity extends ListActivity {
     
     public void loadList() {
         String METHOD = ":loadList(): ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         cursor = searchHandler.getCursor();
         
@@ -170,26 +172,26 @@ public class BookListActivity extends ListActivity {
     
     public void downloadBooks() {
         String METHOD = ":downloadBooks(): ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         new LTLoginDownload().execute(null, null, null);
     }
 
     @SuppressWarnings("unchecked")
     public void importData() {
         String METHOD = ":importData(): ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         Uri uri = intent.getData();
-//        Log.d(TAG, "Intent contains uri=" + uri);
+//        logger.log(TAG, "Intent contains uri=" + uri);
 
         // Date presentTime = Calendar.getInstance().getTime();
         // SimpleDateFormat dateFormatter = new SimpleDateFormat(
         // "yyyyMMddhhmmss");
         // String newTableName = "booksFrom" +
         // dateFormatter.format(presentTime);
-        // Log.d(TAG, "Intended table name=" + newTableName);
+        // logger.log(TAG, "Intended table name=" + newTableName);
 
-//        Log.d(TAG, "Opening InputStreamReader for " + uri + "...");
+//        logger.log(TAG, "Opening InputStreamReader for " + uri + "...");
         InputStream inputStream = null;
         try {
             inputStream = getContentResolver().openInputStream(uri);
@@ -197,7 +199,7 @@ public class BookListActivity extends ListActivity {
             e1.printStackTrace();
         }
 
-//        Log.d(TAG, "Creating CSVReader...");
+//        logger.log(TAG, "Creating CSVReader...");
         try {
             inputStreamReader = new InputStreamReader(inputStream, "utf-16");
         } catch (UnsupportedEncodingException e1) {
@@ -209,14 +211,14 @@ public class BookListActivity extends ListActivity {
                 .strategy(new CSVStrategy('\t', '\b', '#', true, true))
                 .entryParser(new EntryParser()).build();
 
-        Log.d(TAG, "Reading csvData...");
+        logger.log(TAG, "Reading csvData...");
         List<String[]> csvData = null;
         try {
             csvData = csvReader.readAll();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "Successfully read csvData");
+        logger.log(TAG, "Successfully read csvData");
 
         ImportBooksTask task = new ImportBooksTask();
         task.execute(csvData);
@@ -235,7 +237,7 @@ public class BookListActivity extends ListActivity {
         @Override
         protected void onPreExecute() {
             String METHOD = ":ImportBooksTask:onPreExecute(): ";
-            Log.d(TAG + METHOD, "start");
+            logger.log(TAG + METHOD, "start");
             
             dialog = new ProgressDialog(BookListActivity.this);
             dialog.setTitle("Importing books...");
@@ -250,11 +252,11 @@ public class BookListActivity extends ListActivity {
         @Override
         protected String doInBackground(List<String[]>... csvDatas) {
             String METHOD = ":ImportBooksTask:doInBackground(...): ";
-            Log.d(TAG + METHOD, "start");
+            logger.log(TAG + METHOD, "start");
             
             List<String[]> csvData = csvDatas[0];
             String newTableName = "books";
-            Log.d(TAG, "Opening " + newTableName + " in internal database...");
+            logger.log(TAG, "Opening " + newTableName + " in internal database...");
             DbHelperNew dbHelper = new DbHelperNew(getApplicationContext());
             dbHelper.open();
             dialog.setMax(csvData.size());
@@ -282,7 +284,7 @@ public class BookListActivity extends ListActivity {
         @Override
         protected void onPostExecute(String result) {
             String METHOD = ":ImportBooksTask:onPostExecute(" + result + "): ";
-            Log.d(TAG + METHOD, "start");
+            logger.log(TAG + METHOD, "start");
             
             //dialog.dismiss();
             Intent i = new Intent(getApplicationContext(), BookListActivity.class);
@@ -295,7 +297,7 @@ public class BookListActivity extends ListActivity {
     public void onListItemClick(ListView listView, View view, int position,
             long id) {
         String METHOD = ":onListItemClick(position=" + position + "): ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         super.onListItemClick(listView, view, position, id);
         cursor.moveToPosition(position);
@@ -418,14 +420,14 @@ public class BookListActivity extends ListActivity {
                 .strategy(new CSVStrategy('\t', '\b', '#', true, true))
                 .entryParser(new EntryParser()).build();
 
-        Log.d(TAG, "Reading downloadedContent...");
+        logger.log(TAG, "Reading downloadedContent...");
         List<String[]> csvData = null;
         try {
             csvData = csvReader.readAll();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "Successfully read downloadedContent");
+        logger.log(TAG, "Successfully read downloadedContent");
 
         ImportBooksTask task = new ImportBooksTask();
         task.execute(csvData);
@@ -437,13 +439,16 @@ public class BookListActivity extends ListActivity {
     }
     
     private class LTLoginDownload extends AsyncTask<Boolean, Integer, String> {
-        String result;
+        String result;        
         ProgressDialog dialog;
 
+        
         @Override
         protected void onPreExecute() {
             String METHOD = ":LTLoginDownload:onPreExecute(): ";
-            Log.d(TAG + METHOD, "start");
+            logger.log(TAG + METHOD, "start");
+            
+            
             
             dialog = new ProgressDialog(BookListActivity.this);
             dialog.setTitle("Downloading library...");
@@ -474,8 +479,8 @@ public class BookListActivity extends ListActivity {
         }
         
         protected String doInBackground(Boolean... bools) {
-            String METHOD = ":LTLoginDownload:doInBackground()";
-            Log.d(TAG + METHOD, "start");
+            String METHOD = ".LTLoginDownload.doInBackground()";
+            logger.log(TAG + METHOD, "start");
             
             HttpClient client = new DefaultHttpClient();
             HttpPost loginPost = new HttpPost(
@@ -509,7 +514,7 @@ public class BookListActivity extends ListActivity {
             
             String loginResponseBody = "";
             try {
-                loginResponseBody = EntityUtils.toString(loginResponse.getEntity());
+                loginResponseBody = EntityUtils.toString(loginResponse.getEntity(), HTTP.UTF_8);
             } catch (ParseException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -517,6 +522,8 @@ public class BookListActivity extends ListActivity {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
+            
+            logger.log(TAG + METHOD, "loginResponseBody=" + loginResponseBody);
             if (!loginResponseBody.contains("Your collections")) {
                 this.publishProgress(PROGRESS_LOGIN_FAIL);
                 this.cancel(true);
@@ -539,11 +546,11 @@ public class BookListActivity extends ListActivity {
                 e.printStackTrace();
             }
 
-            Log.d(TAG + METHOD, downloadResponse.getStatusLine().toString());
+            logger.log(TAG + METHOD, "downloadResponse StatusLine=" + downloadResponse.getStatusLine().toString());
             String downloadResponseBody = "";
             try {
                 downloadResponseBody = EntityUtils.toString(downloadResponse
-                        .getEntity());
+                        .getEntity(), HTTP.UTF_16);
             } catch (ParseException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -552,6 +559,7 @@ public class BookListActivity extends ListActivity {
                 e.printStackTrace();
             }
 
+            logger.log(TAG + METHOD, "downloadResponseBody=" + downloadResponseBody);
             result = downloadResponseBody;
             DbHelperNew dbHelper = new DbHelperNew(getApplicationContext());
             dbHelper.delete();
@@ -561,15 +569,21 @@ public class BookListActivity extends ListActivity {
         }
 
         protected void onPostExecute(String r) {
-            String METHOD = ":LTLoginDownload:onPostExecute()";
-            Log.d(TAG + METHOD, "start");
-            importBooksFromDownload(result);
+            String METHOD = ".LTLoginDownload.onPostExecute()";
+            logger.log(TAG + METHOD, "start");
+            if (result.length() > 0) {
+                logger.log(TAG + METHOD, "importing books");
+                importBooksFromDownload(result);
+            } else {
+                logger.log(TAG + METHOD, "the download was empty");
+            }
         }
 
     }
     
     public void goToPreferences() {
-        Log.d("blf", "opening application settings");
+        String METHOD = ".goToPreferences()";
+        logger.log(TAG + METHOD, "opening application settings");
         Intent i = new Intent(this, PreferencesActivity.class);
         startActivity(i);
     }
