@@ -35,7 +35,7 @@ public class AuthorListActivity extends Activity {
 
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_author_list) + " (" + authors.size() + "):");
-
+        listView.setFastScrollEnabled(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {

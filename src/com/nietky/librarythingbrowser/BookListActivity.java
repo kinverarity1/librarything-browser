@@ -170,6 +170,7 @@ public class BookListActivity extends ListActivity {
         
 //        adapter = new BookListCursorAdapter(this, cursor);
         adapter = new BookListAdapter(this, new String[] {"title", "author2"});
+        getListView().setFastScrollEnabled(true);
         setListAdapter(adapter);
     }
     

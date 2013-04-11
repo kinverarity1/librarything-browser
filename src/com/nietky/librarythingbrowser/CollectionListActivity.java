@@ -33,6 +33,7 @@ public class CollectionListActivity extends Activity {
         
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_collection_list) + " (" + collections.size() + "):");
+        listView.setFastScrollEnabled(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {

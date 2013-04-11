@@ -35,6 +35,7 @@ public class ReviewListActivity extends Activity {
         setContentView(R.layout.activity_reviewlist);
         
         listView = (ListView) findViewById(R.id.reviewListView);
+        listView.setFastScrollEnabled(true);
         Intent intent = getIntent();
         searchHandler = new SearchHandler(this);
         searchHandler.setIds(intent.getStringExtra("ids"));
