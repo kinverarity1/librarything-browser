@@ -1,3 +1,4 @@
+1.6.1   - 2013-04-11 -  Add the ability to send logs to developer for debugging.
 1.6     - 2013-04-11 -  Improved internal search handling, support for Android 2.0+, and show lists of reviews & comments. 
 1.5.1   - 2013-04-05 -  Add option to remember/forget login credentials.
 1.5     - 2013-04-05 -  Now possible to download and import your library directly from LibraryThing.
