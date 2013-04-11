@@ -1,6 +1,7 @@
 package com.nietky.librarythingbrowser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -82,6 +83,65 @@ public class SearchHandler {
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         openDbHelper();
         return dbHelper.getIds(_ids);
+    }
+    
+    public int size() {
+        return _ids.size();
+    }
+    
+    public Integer getId(int position) {
+        return _ids.get(position);
+    }
+    
+    public ArrayList<String> getColumnArray(String columnName) {
+        String METHOD = ".getColumnArray(columnName=" + columnName + ")";
+        ArrayList<String> column = new ArrayList<String>();
+        openDbHelper();
+        Cursor cursor = dbHelper.getColumn(_ids, columnName);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            column.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
+        close();
+        return column;
+    }
+    
+    public HashMap<String, String> getFields(Integer _id) {
+        String METHOD = ".getFields(_id=" + _id + "): ";
+        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        
+        String fieldname;
+        String[] fieldnames = { "_id", "book_id", "title", "author1",
+                "author2", "author_other", "publication", "date", "ISBNs",
+                "series", "source", "lang1", "lang2", "lang_orig", "LCC",
+                "DDC", "bookcrossing", "date_entered", "date_acquired",
+                "date_started", "date_ended", "stars", "collections", "tags",
+                "review", "summary", "comments", "comments_private", "copies",
+                "encoding" };
+        HashMap<String, String> fields = new HashMap<String, String>();
+        for (int i = 0; i < fieldnames.length; i += 1)
+            fields.put(fieldnames[i], "");
+        Cursor currentCursor = getCursor();
+        currentCursor.moveToFirst();
+        while (!currentCursor.isAfterLast()) {
+            if (currentCursor.getInt(currentCursor.getColumnIndex("_id")) == _id) {
+                for (int i = 0; i < fieldnames.length; i += 1) {
+                    fieldname = fieldnames[i];
+                    int index = currentCursor.getColumnIndex(fieldname);
+                    String content = "";
+                    if (index > -1)
+                        content = currentCursor.getString(index);
+                    content = content.replace("[return]", "\n");
+                    content = content.trim();
+                    fields.put(fieldname, content);
+                }
+                break;
+            }
+        }
+        currentCursor.close();
+        close();
+        return fields;
     }
     
     private String transform (String original) {

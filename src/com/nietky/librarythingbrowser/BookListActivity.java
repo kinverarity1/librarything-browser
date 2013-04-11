@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -43,12 +44,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -76,7 +77,8 @@ public class BookListActivity extends ListActivity {
     private Cursor cursor;
     private ArrayList<Integer> _ids = new ArrayList<Integer>();
     private SearchHandler searchHandler;
-    private BookListCursorAdapter adapter;
+//    private BookListCursorAdapter adapter;
+    private BookListAdapter adapter;
     
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor prefsEdit;
@@ -166,7 +168,8 @@ public class BookListActivity extends ListActivity {
             }
         }
         
-        adapter = new BookListCursorAdapter(this, cursor);
+//        adapter = new BookListCursorAdapter(this, cursor);
+        adapter = new BookListAdapter(this, new String[] {"title", "author2"});
         setListAdapter(adapter);
     }
     
@@ -586,6 +589,46 @@ public class BookListActivity extends ListActivity {
         logger.log(TAG + METHOD, "opening application settings");
         Intent i = new Intent(this, PreferencesActivity.class);
         startActivity(i);
+    }
+    
+    public class BookListAdapter extends BaseAdapter {
+
+        private Context context;
+        LayoutInflater inflater;
+        private ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
+        
+        public BookListAdapter (Context context, String[] columnNames) {
+            this.context = context;
+            inflater = LayoutInflater.from(context);
+            for (int i = 0; i < columnNames.length; i++) {
+                columns.add(searchHandler.getColumnArray(columnNames[i]));
+            }
+        }
+        
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return columns.get(0).size();
+        }
+
+        public Object getItem(int position) {
+            return null;
+        }
+
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.book_list_item, null);
+            }
+            TextView titleView = (TextView) convertView.findViewById(R.id.book_list_item_title);
+            TextView authorView = (TextView) convertView.findViewById(R.id.book_list_item_subtitle);
+            titleView.setText(FormatText.asHtml(columns.get(0).get(position)));
+            authorView.setText(FormatText.asHtml(columns.get(1).get(position)));
+            return convertView;
+        }
     }
 
     public class BookListCursorAdapter extends CursorAdapter {

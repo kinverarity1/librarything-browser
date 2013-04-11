@@ -141,6 +141,31 @@ public class DbHelperNew extends SQLiteOpenHelper {
         }
     }
     
+    public Cursor getColumn(ArrayList<Integer> ids, String columnName) {
+        String METHOD = ".getColumn(" + ids.size() + " ids, columnName=" + columnName + ")";
+        if (ids.size() == 0) {
+            return Db.rawQuery("SELECT " + columnName + " FROM " + TABLE + " WHERE _id == -1", null);
+        } else { 
+            try {
+                String sql = "SELECT " + columnName + " FROM " + TABLE + " WHERE ";
+                sql += "_id IN (" + ids.get(0);
+                for (int i = 1; i < ids.size(); i++) {
+                    sql += ", " + ids.get(i);
+                }
+                sql += ")";
+                Cursor cursor = Db.rawQuery(sql, null);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                }
+                Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
+                return cursor;
+            } catch (SQLException mSQLException) {
+                Log.e(TAG, "getTestData >>" + mSQLException.toString());
+                throw mSQLException;
+            }
+        }
+    }
+    
     public ArrayList<Integer> getAllIds() {
         String METHOD = ".getAllIds: ";
         Log.d(TAG + METHOD, "start");
