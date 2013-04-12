@@ -29,7 +29,7 @@ public class CollectionListActivity extends Activity {
         searchHandler.setIds(intent.getStringExtra("ids"));
         collections = CursorTags.getCollections(searchHandler.getCursor());
         Collections.sort(collections, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, collections);
+        SectionIndexingArrayAdapter<String> adapter = new SectionIndexingArrayAdapter<String>(this, android.R.layout.simple_list_item_1, collections);
         
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_collection_list) + " (" + collections.size() + "):");

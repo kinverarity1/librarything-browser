@@ -30,8 +30,7 @@ public class TagListActivity extends Activity {
         searchHandler.setIds(intent.getStringExtra("ids"));
         tags = CursorTags.getTags(searchHandler.getCursor());
         Collections.sort(tags, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, tags);
+        SectionIndexingArrayAdapter<String> adapter = new SectionIndexingArrayAdapter<String>(this, android.R.layout.simple_list_item_1, tags);
 
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_tag_list) + " (" + tags.size() + "):");

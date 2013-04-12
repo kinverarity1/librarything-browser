@@ -5,16 +5,16 @@ import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class AuthorListActivity extends Activity {
+    String TAG = "AuthorListActivity";
     ArrayList<String> authors;
     ListView listView;
+    ArrayList<String> alpha;
     
     SearchHandler searchHandler;
 
@@ -22,6 +22,7 @@ public class AuthorListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author_list);
+        
 
         listView = (ListView) findViewById(R.id.authorListView);
 
@@ -30,9 +31,9 @@ public class AuthorListActivity extends Activity {
         searchHandler.setIds(intent.getStringExtra("ids"));
         authors = CursorTags.getAuthors1(searchHandler.getCursor());
         Collections.sort(authors, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, authors);
-
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_list_item_1, authors);
+        SectionIndexingArrayAdapter<String> adapter = new SectionIndexingArrayAdapter(this, android.R.layout.simple_list_item_1, authors);
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_author_list) + " (" + authors.size() + "):");
         listView.setFastScrollEnabled(true);
@@ -47,9 +48,7 @@ public class AuthorListActivity extends Activity {
                 startActivity(intent);
             }
         });
-
     }
-    
 
     protected String getIds() {
         return searchHandler.getString();
