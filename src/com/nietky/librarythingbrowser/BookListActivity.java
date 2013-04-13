@@ -92,8 +92,7 @@ public class BookListActivity extends ListActivity {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this
-                .getApplicationContext());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         logger = new LogHandler(sharedPref);
         
         CookieStore cookieStore = new BasicCookieStore();

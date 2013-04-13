@@ -5,13 +5,18 @@ import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class AuthorListActivity extends Activity {
     String TAG = "AuthorListActivity";
+    SharedPreferences sharedPref;
+    LogHandler logger;
+    
     ArrayList<String> authors;
     ListView listView;
     ArrayList<String> alpha;
@@ -22,8 +27,9 @@ public class AuthorListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author_list);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
         
-
         listView = (ListView) findViewById(R.id.authorListView);
 
         Intent intent = getIntent();

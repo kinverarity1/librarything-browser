@@ -13,6 +13,7 @@ public class SearchHandler {
     private static final String TAG = "SearchHandler";
     
     private SharedPreferences sharedPref;
+    public static LogHandler logger;
     
     private Context _context;
     private ArrayList<Integer> _ids;
@@ -24,7 +25,9 @@ public class SearchHandler {
         Log.d(TAG + METHOD, "start");
         
         _context = context;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());      
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        
         _ids = new ArrayList<Integer> ();
     }
     
@@ -48,11 +51,17 @@ public class SearchHandler {
     public void setIds (String commaSeparatedIds) {
         String METHOD = "-setIds(a String)";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        Log.d(TAG + METHOD, "commaSeparatedIds=" + commaSeparatedIds);
         String[] ids = commaSeparatedIds.split(",");
         _ids = new ArrayList<Integer> ();
-        for (int i = 0; i < ids.length; i++) {
-            int id = Integer.valueOf(ids[i]);
-            _ids.add(id);
+        Log.d(TAG + METHOD, "ids.length=" + ids.length);
+        if (ids.length > 0) {
+            for (int i = 0; i < ids.length; i++) {
+                if (ids[i].length() > 0) {
+                    int id = Integer.valueOf(ids[i]);
+                    _ids.add(id);
+                }
+            }
         }
     }
     
@@ -178,6 +187,8 @@ public class SearchHandler {
     public void restrictByTag(String tag) {
         String METHOD = "-restrictByTag(" + tag + "): ";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        tag = tag.trim();
+        Log.d(TAG + METHOD, "trimmed tag query to |" + tag + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -200,6 +211,8 @@ public class SearchHandler {
     public void restrictByCollection(String collection) {
         String METHOD = "-restrictByCollection(" + collection + "):";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        collection = collection.trim();
+        Log.d(TAG + METHOD, "trimmed collection query to |" + collection + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -226,6 +239,8 @@ public class SearchHandler {
     public void restrictByAuthor (String author) {
         String METHOD = "-restrictByAuthor(" + author + "):";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        author = author.trim();
+        Log.d(TAG + METHOD, "trimmed author query to |" + author + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {

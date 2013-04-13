@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
@@ -24,7 +25,9 @@ import android.widget.TextView;
 
 public class BookDetailActivity extends Activity {
     public static final String TAG = "BookDetailActivity";
-
+    SharedPreferences sharedPref;
+    LogHandler logger;
+    
     private String id;
     private Cursor cursor;
     private Context context;
@@ -36,7 +39,9 @@ public class BookDetailActivity extends Activity {
         String METHOD = "-onCreate():";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
-
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        
         context = this;
 
         Intent intent = getIntent();

@@ -5,13 +5,18 @@ import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class CollectionListActivity extends Activity {
+    public static String TAG = "CollectionListActivity";
+    public static LogHandler logger;
+    public static SharedPreferences sharedPref;
+    
     ArrayList<String> collections;
     ListView listView;
     
@@ -21,6 +26,9 @@ public class CollectionListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection_list);
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
         
         listView = (ListView) findViewById(R.id.collectionListView);
 
@@ -39,25 +47,13 @@ public class CollectionListActivity extends Activity {
                     int position, long id) {
                 String collection = collections.get(position);
                 Intent intent = new Intent(parent.getContext(), BookListActivity.class);
-                intent.putExtra("collectionName", collection);
+                intent.putExtra("collectionName", collection.trim());
                 // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
                 intent.putExtra("ids", getIds());
                 startActivity(intent);
             }
         });
     }
-//    
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        // String selection = l.getItemAtPosition(position).toString();
-//        String collection = collections.get(position);
-//        Intent intent = new Intent(this, BookListActivity.class);
-//        intent.putExtra("collectionName", collection);
-//
-//        // The following MUST be made subject to a preference for exclusive/inclusive/ask tag/collection handling
-//        intent.putExtra("ids", getIds());
-//        
-//        startActivity(intent);
-//    }
     
     protected String getIds() {
         return searchHandler.getString();
