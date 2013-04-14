@@ -32,16 +32,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class DebugLog extends Activity {
+    String TAG = "DebugLog";
+    SharedPreferences sharedPref;
+    LogHandler logger;
+    
     String logText;
     Integer maxLog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String METHOD = ".onCreate()";
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug_log);
         
         TextView text = (TextView) findViewById(R.id.debug_log_text);
         final EditText message = (EditText) findViewById(R.id.debug_log_message);
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
+        
         maxLog = Integer.valueOf(sharedPref.getString("max_log", "1000000")); 
         logText = sharedPref.getString("debug_log", "");
         int n = logText.length();

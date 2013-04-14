@@ -13,33 +13,38 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DbHelperNew extends SQLiteOpenHelper {
-    private static final String TAG = "DbHelperNew";
+    String TAG = "DbHelperNew";
+    SharedPreferences sharedPref;
+    LogHandler logger;
     
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "LibraryThing";
-    private static String DATABASE_PATH = "";
-    public static SQLiteDatabase Db;
-    private static String TABLE = "books";
-    @SuppressWarnings("unused")
-    private static Context context;
-    private static final String[] KEYS = { "book_id", "title", "author1",
+    static int DATABASE_VERSION = 1;
+    static String DATABASE_NAME = "LibraryThing";
+    
+    String DATABASE_PATH = "";
+    SQLiteDatabase Db;
+    String TABLE = "books";
+    Context context;
+    String[] KEYS = { "book_id", "title", "author1",
             "author2", "author_other", "publication", "date", "ISBNs",
             "series", "source", "lang1", "lang2", "lang_orig", "LCC", "DDC",
             "bookcrossing", "date_entered", "date_acquired", "date_started",
             "date_ended", "stars", "collections", "tags", "review", "summary",
             "comments", "comments_private", "copies", "encoding" };
-    private static String[] ALL_KEYS = { "_id", "book_id", "title", "author1",
+    String[] ALL_KEYS = { "_id", "book_id", "title", "author1",
             "author2", "author_other", "publication", "date", "ISBNs",
             "series", "source", "lang1", "lang2", "lang_orig", "LCC", "DDC",
             "bookcrossing", "date_entered", "date_acquired", "date_started",
             "date_ended", "stars", "collections", "tags", "review", "summary",
             "comments", "comments_private", "copies", "encoding" };
-    private SharedPreferences sharedPref;
 
     public DbHelperNew(Context contextLocal) {      
         super(contextLocal, DATABASE_NAME, null, DATABASE_VERSION);
         String METHOD = ".constructor: ";
         Log.d(TAG + METHOD, "start");
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(contextLocal.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         DATABASE_PATH = "/data/data/" + contextLocal.getPackageName()
                 + "/databases/";

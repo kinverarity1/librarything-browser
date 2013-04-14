@@ -10,7 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -60,40 +59,38 @@ import com.googlecode.jcsv.reader.CSVReader;
 import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
 
 public class BookListActivity extends ListActivity {
-
-    public static LogHandler logger;
+    String TAG = "BookListActivity";
+    LogHandler logger;
+    Intent intent;
+    String MESSAGE_TABLE_NAME = "com.nietky.librarythingbrowser.TABLE_NAME";
+    InputStreamReader inputStreamReader = null;
     
-    private static Intent intent;
-    public static final String MESSAGE_TABLE_NAME = "com.nietky.librarythingbrowser.TABLE_NAME";
-    private InputStreamReader inputStreamReader = null;
-    private static final String TAG = "BookListActivity";
-
-    public static final int RESULT_TAG_SELECT = 1;
-    public static final int RESULT_COLLECTION_SELECT = 2;
-    public static final int PROGRESS_LOGGED_IN = 3;
-    public static final int PROGRESS_SUCCESS = 4;
-    public static final int PROGRESS_LOGIN_FAIL = 5;
-
-    private Cursor cursor;
-    private ArrayList<Integer> _ids = new ArrayList<Integer>();
-    private SearchHandler searchHandler;
-//    private BookListCursorAdapter adapter;
-    private BookListAdapter adapter;
+    int RESULT_TAG_SELECT = 1;
+    int RESULT_COLLECTION_SELECT = 2;
     
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor prefsEdit;
+    int PROGRESS_LOGGED_IN = 3;
+    int PROGRESS_SUCCESS = 4;
+    int PROGRESS_LOGIN_FAIL = 5;
+
+    Cursor cursor;
+    ArrayList<Integer> _ids = new ArrayList<Integer>();
+    SearchHandler searchHandler;
+    BookListAdapter adapter;
+    
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor prefsEdit;
     
     HttpContext localContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        String METHOD = "-onCreate(): ";
-//        logger.log(TAG + METHOD, "start");
+        String METHOD = ".onCreate()";
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         CookieStore cookieStore = new BasicCookieStore();
         localContext = new BasicHttpContext();

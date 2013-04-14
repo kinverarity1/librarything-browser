@@ -5,10 +5,10 @@ import java.util.HashMap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -19,7 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ReviewListActivity extends Activity {
-    public final static String TAG = "ReviewListActivity";
+    String TAG = "ReviewListActivity";
+    SharedPreferences sharedPref;
+    LogHandler logger;
     
     ReviewListCursorAdapter adapter;
     ListView listView;
@@ -28,11 +30,14 @@ public class ReviewListActivity extends Activity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String METHOD = ":onCreate(): ";
-        Log.d(TAG + METHOD, "start");
+        String METHOD = ".onCreate()";
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviewlist);
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         listView = (ListView) findViewById(R.id.reviewListView);
         listView.setFastScrollEnabled(true);

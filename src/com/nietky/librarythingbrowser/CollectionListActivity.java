@@ -13,22 +13,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class CollectionListActivity extends Activity {
-    public static String TAG = "CollectionListActivity";
-    public static LogHandler logger;
-    public static SharedPreferences sharedPref;
-    
+    String TAG = "CollectionListActivity";
+    LogHandler logger;
+    SharedPreferences sharedPref;
     ArrayList<String> collections;
     ListView listView;
-    
     SearchHandler searchHandler;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String METHOD = ".onCreate()";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection_list);
         
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         listView = (ListView) findViewById(R.id.collectionListView);
 

@@ -9,8 +9,7 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.SectionIndexer;
 
-class SectionIndexingArrayAdapter<T> extends ArrayAdapter<T> implements
-        SectionIndexer {
+class SectionIndexingArrayAdapter<T> extends ArrayAdapter<T> implements SectionIndexer {
 
     HashMap<String, Integer> sectionsMap = new HashMap<String, Integer>();
     ArrayList<String> sectionsList = new ArrayList<String>();

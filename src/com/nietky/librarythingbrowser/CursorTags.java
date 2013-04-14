@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.database.Cursor;
 
 public class CursorTags {
+    String TAG = "CursorTags";
 
     public static ArrayList<String> getTags(Cursor cursor) {
         ArrayList<String> tagsArray = new ArrayList<String>();

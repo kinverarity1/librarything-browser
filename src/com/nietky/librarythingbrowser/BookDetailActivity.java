@@ -3,17 +3,16 @@ package com.nietky.librarythingbrowser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -24,15 +23,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class BookDetailActivity extends Activity {
-    public static final String TAG = "BookDetailActivity";
+    String TAG = "BookDetailActivity";
     SharedPreferences sharedPref;
     LogHandler logger;
-    
-    private String id;
-    private Cursor cursor;
-    private Context context;
-
-    private HashMap<String, String> fields;
+    String id;
+    Cursor cursor;
+    Context context;
+    HashMap<String, String> fields;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

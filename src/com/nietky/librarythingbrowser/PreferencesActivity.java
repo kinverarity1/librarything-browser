@@ -10,7 +10,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class PreferencesActivity extends PreferenceActivity  {
-
+    String TAG = "PreferencesActivity";
+    SharedPreferences sharedPref;
+    LogHandler logger;
+    
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

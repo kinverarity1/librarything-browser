@@ -2,14 +2,13 @@ package com.nietky.librarythingbrowser;
 
 import java.util.HashMap;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class CommentListActivity extends Activity {
-    public final static String TAG = "CommentListActivity";
+    String TAG = "CommentListActivity";
+    SharedPreferences sharedPref;
+    LogHandler logger;
     
     CommentListCursorAdapter adapter;
     ListView listView;
@@ -37,6 +38,9 @@ public class CommentListActivity extends Activity {
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviewlist);
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
         
         listView = (ListView) findViewById(R.id.reviewListView);
         listView.setFastScrollEnabled(true);

@@ -10,19 +10,21 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class SearchHandler {
-    private static final String TAG = "SearchHandler";
+    String TAG = "SearchHandler";
+    SharedPreferences sharedPref;
+    LogHandler logger;
     
-    private SharedPreferences sharedPref;
-    public static LogHandler logger;
-    
-    private Context _context;
-    private ArrayList<Integer> _ids;
+    Context _context;
+    ArrayList<Integer> _ids;
 
-    public DbHelperNew dbHelper;
+    DbHelperNew dbHelper;
 
     public SearchHandler(Context context) {
         String METHOD = ".constructor(Context): ";
-        Log.d(TAG + METHOD, "start");
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         _context = context;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());

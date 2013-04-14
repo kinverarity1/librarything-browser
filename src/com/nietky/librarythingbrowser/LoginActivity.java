@@ -17,6 +17,7 @@ import android.widget.EditText;
 public class LoginActivity extends Activity {
     
     private static final String TAG = "LoginActivity";
+    LogHandler logger;
 
     EditText usernameBox;
     EditText passwordBox;
@@ -27,14 +28,14 @@ public class LoginActivity extends Activity {
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String METHOD = ":onCreate(): ";
-        Log.d(TAG + METHOD, "start");
+        String METHOD = ".onCreate()";
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this
-                .getApplicationContext());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
         
         usernameBox = (EditText) findViewById(R.id.login_lt_username);
         passwordBox = (EditText) findViewById(R.id.login_lt_password);

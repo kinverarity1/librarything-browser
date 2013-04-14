@@ -4,10 +4,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 public class LogHandler  {
-    private Integer maxLog;
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor prefsEdit;
-    private boolean logFlag;
+    Integer maxLog;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor prefsEdit;
+    boolean logFlag;
     
     public LogHandler (SharedPreferences prefs) {
         sharedPref = prefs;
