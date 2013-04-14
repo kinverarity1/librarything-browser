@@ -1,3 +1,4 @@
+1.6.3   - 2013-04-13 -  Bug fixes.
 1.6.2   - 2013-04-12 -  Fast scroll bar and alphabetic index for lists of tags and authors.
 1.6.1   - 2013-04-11 -  Add the ability to send logs to developer for debugging.
 1.6     - 2013-04-11 -  Improved internal search handling, support for Android 2.0+, and show lists of reviews & comments. 
