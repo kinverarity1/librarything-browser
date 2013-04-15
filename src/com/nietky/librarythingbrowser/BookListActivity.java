@@ -49,7 +49,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -296,14 +295,15 @@ public class BookListActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView listView, View view, int position,
             long id) {
-        String METHOD = ":onListItemClick(position=" + position + "): ";
+        String METHOD = ".onListItemClick(position=" + position + ")";
         logger.log(TAG + METHOD, "start");
         
         super.onListItemClick(listView, view, position, id);
-        cursor.moveToPosition(position);
+        cursor.moveToPosition(position - 2);
         String _id = cursor.getString(cursor.getColumnIndex("_id"));
         Intent intent = new Intent(this, BookDetailActivity.class);
         intent.putExtra("_id", _id);
+        intent.putExtra("ids", searchHandler.getString());
         startActivity(intent);
     }
 
@@ -590,13 +590,17 @@ public class BookListActivity extends ListActivity {
     
     public class BookListAdapter extends BaseAdapter {
 
+        static final int TYPE_RESULT_DETAIL = 0;
+        static final int TYPE_BOOK_LIST_ITEM = 1;
+        static final int TYPE_SEPARATOR = 2;
+        
         private Context context;
         LayoutInflater inflater;
         private ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
         
         public BookListAdapter (Context context, String[] columnNames) {
             this.context = context;
-            inflater = LayoutInflater.from(context);
+            inflater = LayoutInflater.from(context);            
             for (int i = 0; i < columnNames.length; i++) {
                 columns.add(searchHandler.getColumnArray(columnNames[i]));
             }
@@ -604,7 +608,20 @@ public class BookListActivity extends ListActivity {
         
         public int getCount() {
             // TODO Auto-generated method stub
-            return columns.get(0).size();
+            return columns.get(0).size() + 2;
+        }
+        
+        public int getViewTypeCount() {
+            return 3;
+        }
+        
+        public int getItemViewType(int position) {
+            if (position == 0)
+                return TYPE_RESULT_DETAIL;
+            else if (position == 1)
+                return TYPE_SEPARATOR;
+            else 
+                return TYPE_BOOK_LIST_ITEM;
         }
 
         public Object getItem(int position) {
@@ -617,45 +634,45 @@ public class BookListActivity extends ListActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            int type = getItemViewType(position);
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.book_list_item, null);
+                holder = new ViewHolder();
+                switch (type) {
+                    case TYPE_RESULT_DETAIL:
+                        convertView = inflater.inflate(R.layout.book_list_result_detail, null);
+                        holder.title = (TextView) convertView.findViewById(R.id.book_list_result_detail_text);
+                        break;
+                    case TYPE_SEPARATOR:
+                        convertView = inflater.inflate(R.layout.list_separator, null);
+                        holder.view = convertView.findViewById(R.id.list_separator_view);
+                        break;
+                    case TYPE_BOOK_LIST_ITEM:
+                        convertView = inflater.inflate(R.layout.book_list_item, null);
+                        holder.title = (TextView) convertView.findViewById(R.id.book_list_item_title);
+                        holder.subtitle = (TextView) convertView.findViewById(R.id.book_list_item_subtitle);
+                        break;
+                }
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
             }
-            TextView titleView = (TextView) convertView.findViewById(R.id.book_list_item_title);
-            TextView authorView = (TextView) convertView.findViewById(R.id.book_list_item_subtitle);
-            titleView.setText(FormatText.asHtml(columns.get(0).get(position)));
-            authorView.setText(FormatText.asHtml(columns.get(1).get(position)));
+            switch (type) {
+                case TYPE_RESULT_DETAIL:
+                    holder.title.setText(columns.get(0).size() + " results");
+                    break;
+                case TYPE_BOOK_LIST_ITEM:
+                    holder.title.setText(FormatText.asHtml(columns.get(0).get(position - 2)));
+                    holder.subtitle.setText(FormatText.asHtml(columns.get(1).get(position - 2)));
+                    break;
+            }
             return convertView;
         }
     }
-
-    public class BookListCursorAdapter extends CursorAdapter {
-        LayoutInflater inflater;
-        @SuppressWarnings("deprecation")
-        public BookListCursorAdapter(Context context, Cursor c) {
-            super(context, c);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            TextView titleTV = (TextView) view
-                    .findViewById(R.id.book_list_item_title);
-            TextView subTitleTV = (TextView) view
-                    .findViewById(R.id.book_list_item_subtitle);
-            titleTV.setText(FormatText.asHtml(cursor.getString(cursor.getColumnIndex("title"))));
-            subTitleTV.setText(FormatText.asHtml(cursor.getString(cursor
-                    .getColumnIndex("author2"))));
-            // if
-            // (cursor.getString(cursor.getColumnIndex("tags")).contains("unread"))
-            // {
-            // view.setBackgroundColor(Color.GRAY);
-            // } else
-            // view.setBackgroundColor(Color.BLACK);
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return inflater.inflate(R.layout.book_list_item, parent, false);
-        }
-    }
+    static class ViewHolder {
+        View view;
+        TextView title;
+        TextView subtitle;
+        int position;
+      }
 }

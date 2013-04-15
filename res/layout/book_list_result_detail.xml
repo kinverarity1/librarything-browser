@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/book_list_result_detail_text"
+        style="?android:attr/textAppearanceMedium"
+        android:textSize="16sp"
+        android:layout_marginLeft="3px"
+        android:layout_marginRight="3px"
+        android:layout_marginTop="4px"
+        android:layout_marginBottom="5px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/details_ui_title_dummy"
+        android:textColor="#eee" />
+
+</LinearLayout>
