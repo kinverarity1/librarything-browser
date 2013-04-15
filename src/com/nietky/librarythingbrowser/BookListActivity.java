@@ -524,7 +524,7 @@ public class BookListActivity extends ListActivity {
             }
             
             logger.log(TAG + METHOD, "loginResponseBody=" + loginResponseBody);
-            if (!loginResponseBody.contains("Your collections")) {
+            if (!loginResponseBody.contains("/home/" + sharedPref.getString("lt_username", ""))) {
                 this.publishProgress(PROGRESS_LOGIN_FAIL);
                 this.cancel(true);
                 loginPost.abort();
