@@ -47,6 +47,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -74,6 +75,7 @@ public class BookListActivity extends ListActivity {
     Cursor cursor;
     ArrayList<Integer> _ids = new ArrayList<Integer>();
     SearchHandler searchHandler;
+    ArrayList<ClickThrough> queryClickThroughs = new ArrayList<ClickThrough>();
     BookListAdapter adapter;
     
     SharedPreferences sharedPref;
@@ -109,28 +111,44 @@ public class BookListActivity extends ListActivity {
             logger.log(TAG + METHOD, "Intent.ACTION_VIEW");
             importData();
         } else if (Intent.ACTION_SEARCH.equals(action)) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            String query = "";
+            if (intent.hasExtra("generalQuery"))
+                query = intent.getStringExtra("generalQuery");
+            else
+                query = intent.getStringExtra(SearchManager.QUERY);
             logger.log(TAG + METHOD, "Intent.ACTION_SEARCH query=" + query);
             searchHandler.restrictByQuery(query);
             setTitle(query);
+            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_TAG));
+            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_COLLECTION));
+            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_AUTHOR));
             loadList();
         } else if (intent.hasExtra("tagName")) {
             String tag = intent.getStringExtra("tagName");
             logger.log(TAG + METHOD, "Intent has an extra: tagName=" + tag);
             searchHandler.restrictByTag(tag);
             setTitle(tag);
+            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_GENERAL));
+            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_COLLECTION));
+            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_AUTHOR));
             loadList();
         } else if (intent.hasExtra("collectionName")) {
             String collection = intent.getStringExtra("collectionName");
             logger.log(TAG + METHOD, "Intent has an extra: collectionName=" + collection);
             searchHandler.restrictByCollection(collection);
             setTitle(collection);
+            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_GENERAL));
+            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_TAG));
+            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_AUTHOR));
             loadList();
         } else if (intent.hasExtra("authorName")) {
             String author = intent.getStringExtra("authorName");
             logger.log(TAG + METHOD, "Intent has an extra: authorName=" + author);
             searchHandler.restrictByAuthor(author);
             setTitle(author);
+            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_GENERAL));
+            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_TAG));
+            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_COLLECTION));
             loadList();
         } else if (intent.hasExtra("downloadBooks")) {
             logger.log(TAG + METHOD, "Intent has an extra: downloadBooks");
@@ -164,7 +182,7 @@ public class BookListActivity extends ListActivity {
         }
         
 //        adapter = new BookListCursorAdapter(this, cursor);
-        adapter = new BookListAdapter(this, new String[] {"title", "author2"});
+        adapter = new BookListAdapter(this, new String[] {"title", "author2"}, queryClickThroughs);
         getListView().setFastScrollEnabled(true);
         setListAdapter(adapter);
     }
@@ -290,21 +308,6 @@ public class BookListActivity extends ListActivity {
             finish();
             startActivity(i);
         }
-    }
-
-    @Override
-    public void onListItemClick(ListView listView, View view, int position,
-            long id) {
-        String METHOD = ".onListItemClick(position=" + position + ")";
-        logger.log(TAG + METHOD, "start");
-        
-        super.onListItemClick(listView, view, position, id);
-        cursor.moveToPosition(position - 2);
-        String _id = cursor.getString(cursor.getColumnIndex("_id"));
-        Intent intent = new Intent(this, BookDetailActivity.class);
-        intent.putExtra("_id", _id);
-        intent.putExtra("ids", searchHandler.getString());
-        startActivity(intent);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -590,38 +593,70 @@ public class BookListActivity extends ListActivity {
     
     public class BookListAdapter extends BaseAdapter {
 
-        static final int TYPE_RESULT_DETAIL = 0;
-        static final int TYPE_BOOK_LIST_ITEM = 1;
-        static final int TYPE_SEPARATOR = 2;
+        static final int TYPE_CLICK_THROUGH =       0;
+        static final int TYPE_RESULT_DETAIL =       1;
+        static final int TYPE_SEPARATOR =           2;
+        static final int TYPE_BOOK_LIST_ITEM =      3;
         
-        private Context context;
+        static final int DETAIL_SEARCH =            0;
+        static final int DETAIL_RESULTS =           1;
+        
+        int TYPES = 4;
+        
+        Context context;
         LayoutInflater inflater;
-        private ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
+        ArrayList<ClickThrough> clickThroughs = new ArrayList<ClickThrough>();
         
-        public BookListAdapter (Context context, String[] columnNames) {
+        public BookListAdapter (Context context, String[] columnNames, ArrayList<ClickThrough> clickThroughs) {
+            String METHOD = ".BookListAdapter(clickThroughs.size()=" + clickThroughs.size() + ")";
             this.context = context;
             inflater = LayoutInflater.from(context);            
             for (int i = 0; i < columnNames.length; i++) {
                 columns.add(searchHandler.getColumnArray(columnNames[i]));
             }
+            if (clickThroughs.size() > 0)
+                TYPES += 1;
+            this.clickThroughs = clickThroughs;
+//            logger.log(TAG + METHOD, "TYPES=" + TYPES);
         }
         
         public int getCount() {
-            // TODO Auto-generated method stub
-            return columns.get(0).size() + 2;
+            String METHOD = ".getCount()";
+            int count = columns.get(0).size() + 2 + 1 + clickThroughs.size();
+//            logger.log(TAG + METHOD, "count=" + count);
+            return count;
         }
         
         public int getViewTypeCount() {
-            return 3;
+            return TYPES;
         }
         
         public int getItemViewType(int position) {
-            if (position == 0)
-                return TYPE_RESULT_DETAIL;
-            else if (position == 1)
-                return TYPE_SEPARATOR;
+            int viewType;
+            if (position < clickThroughs.size())
+                viewType = TYPE_CLICK_THROUGH;
+            else if (position < clickThroughs.size() + 2)
+                viewType = TYPE_RESULT_DETAIL;
+            else if (position < clickThroughs.size() + 2 + 1)
+                viewType = TYPE_SEPARATOR;
             else 
-                return TYPE_BOOK_LIST_ITEM;
+                viewType = TYPE_BOOK_LIST_ITEM;
+            return viewType;
+        }
+        
+        public int getBookListPosition(int position) {
+            // The -2 is for the result details; -1 for the separator.
+            return position - clickThroughs.size() - 2 - 1;
+        }
+        
+        public int getWhichResultDetail(int position) {
+            int viewType = -1;
+            if (position == (clickThroughs.size()))
+                viewType = DETAIL_SEARCH;
+            else if (position == (clickThroughs.size() + 1))
+                viewType = DETAIL_RESULTS;
+            return viewType;
         }
 
         public Object getItem(int position) {
@@ -629,25 +664,33 @@ public class BookListActivity extends ListActivity {
         }
 
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
+            String METHOD = ".getView(position=" + position + ")";
             ViewHolder holder = null;
             int type = getItemViewType(position);
             if (convertView == null) {
                 holder = new ViewHolder();
                 switch (type) {
+                    case TYPE_CLICK_THROUGH:
+//                        logger.log(TAG + METHOD, "convertView==null, type=TYPE_CLICK_THROUGH");
+                        convertView = inflater.inflate(R.layout.book_list_click_through, null);
+                        holder.textview = (TextView) convertView.findViewById(R.id.book_list_click_through_text);
+                        break;
                     case TYPE_RESULT_DETAIL:
+//                        logger.log(TAG + METHOD, "convertView==null, type=TYPE_RESULT_DETAIL");
                         convertView = inflater.inflate(R.layout.book_list_result_detail, null);
                         holder.title = (TextView) convertView.findViewById(R.id.book_list_result_detail_text);
                         break;
                     case TYPE_SEPARATOR:
+//                        logger.log(TAG + METHOD, "convertView==null, type=TYPE_SEPARATOR");
                         convertView = inflater.inflate(R.layout.list_separator, null);
                         holder.view = convertView.findViewById(R.id.list_separator_view);
                         break;
                     case TYPE_BOOK_LIST_ITEM:
+//                        logger.log(TAG + METHOD, "convertView==null, type=TYPE_BOOK_LIST_ITEM");
                         convertView = inflater.inflate(R.layout.book_list_item, null);
                         holder.title = (TextView) convertView.findViewById(R.id.book_list_item_title);
                         holder.subtitle = (TextView) convertView.findViewById(R.id.book_list_item_subtitle);
@@ -658,21 +701,111 @@ public class BookListActivity extends ListActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
             switch (type) {
+                case TYPE_CLICK_THROUGH:
+                    ClickThrough clickThrough = clickThroughs.get(position);
+                    holder.textview.setText(clickThrough.getViewText());
+                    break;
                 case TYPE_RESULT_DETAIL:
-                    holder.title.setText(columns.get(0).size() + " results");
+                    switch (getWhichResultDetail(position)) {
+                        case DETAIL_SEARCH:
+                            holder.title.setText("searched for something or other");
+                            break;
+                        case DETAIL_RESULTS:
+                            holder.title.setText(columns.get(0).size() + " results:");
+                            break;
+                    }
                     break;
                 case TYPE_BOOK_LIST_ITEM:
-                    holder.title.setText(FormatText.asHtml(columns.get(0).get(position - 2)));
-                    holder.subtitle.setText(FormatText.asHtml(columns.get(1).get(position - 2)));
+                    holder.title.setText(FormatText.asHtml(columns.get(0).get(getBookListPosition(position))));
+                    holder.subtitle.setText(FormatText.asHtml(columns.get(1).get(getBookListPosition(position))));
                     break;
             }
             return convertView;
         }
     }
+    
+    @Override
+    public void onListItemClick(ListView listView, View view, int position,
+            long id) {
+        String METHOD = ".onListItemClick(position=" + position + ")";
+        super.onListItemClick(listView, view, position, id);
+        int viewType = adapter.getItemViewType(position);
+        if (viewType == adapter.TYPE_BOOK_LIST_ITEM) {
+            logger.log(TAG + METHOD, "clicked on TYPE_BOOK_LIST_ITEM");
+            cursor.moveToPosition(adapter.getBookListPosition(position));
+            String _id = cursor.getString(cursor.getColumnIndex("_id"));
+            Intent intent = new Intent(this, BookDetailActivity.class);
+            intent.putExtra("_id", _id);
+            intent.putExtra("ids", searchHandler.getString());
+            startActivity(intent);
+        } else if (viewType == adapter.TYPE_CLICK_THROUGH) {
+            logger.log(TAG + METHOD, "clicked on TYPE_CLICK_THROUGH");
+            startActivity(adapter.clickThroughs.get(position).getIntent());
+        }
+    }
+    
     static class ViewHolder {
         View view;
+        TextView textview;
         TextView title;
         TextView subtitle;
         int position;
-      }
+    }
+    
+    static class ClickThrough {
+        static final int QUERY_TAG = 0;
+        static final int QUERY_COLLECTION = 1;
+        static final int QUERY_AUTHOR = 2;
+        static final int QUERY_GENERAL = 4;
+        
+        int queryType;
+        Context context; 
+        String query;
+        
+        public ClickThrough (Context context, String query, int queryType) {
+            this.context = context;
+            this.queryType = queryType;
+            this.query = query;
+        }
+        
+        public String getViewText () {
+            String text = "";
+            switch (queryType) {
+            case QUERY_GENERAL:
+                text = "Search for " + query;
+                break;
+            case QUERY_TAG:
+                text = "Search for the tag '" + query + "'";
+                break;
+            case QUERY_COLLECTION:
+                text = "Search for collection '" + query + "'";
+                break;
+            case QUERY_AUTHOR:
+                text = "Search '" + query + "' in author names";
+                break;
+            }
+            return text;
+        }
+        
+        public Intent getIntent () {
+            Intent intent = new Intent();
+            intent.setClass(context, BookListActivity.class);
+            switch (queryType) {
+                case QUERY_GENERAL:
+                    intent.setAction(Intent.ACTION_SEARCH);
+                    intent.putExtra("generalQuery", query);
+                    break;
+                case QUERY_TAG:
+                    intent.putExtra("tagName", query);
+                    break;
+                case QUERY_COLLECTION:
+                    intent.putExtra("collectionName", query);
+                    break;
+                case QUERY_AUTHOR:
+                    intent.putExtra("authorName", query);
+                    break;
+            }
+            return intent;
+        }
+    }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/book_list_click_through_text"
+        style="?android:attr/textAppearanceMedium"
+        android:textSize="16sp"
+        android:gravity="left"
+        android:layout_marginLeft="3px"
+        android:layout_marginRight="3px"
+        android:layout_marginTop="6px"
+        android:layout_marginBottom="6px"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/details_ui_title_dummy"
+        android:textColor="#faa" />
+    
+    <ImageView
+        android:id="@+id/book_list_click_through_arrow"
+        android:gravity="right"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_menu_search" />
+</LinearLayout>

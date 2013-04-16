@@ -19,6 +19,7 @@
         <TextView
             android:id="@+id/book_list_item_subtitle"
             style="?android:attr/textAppearanceSmall"
+            android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/details_ui_authors_dummy" />

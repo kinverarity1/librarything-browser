@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
+            android:textSize="16sp"
             android:text="@string/details_ui_title_dummy"
             android:textStyle="italic" />
         <TextView
@@ -53,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_date_entered_preface" />
         
@@ -61,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_date_acquired_preface" />
         
@@ -69,6 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_date_started_preface" />
         
@@ -77,6 +81,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_date_ended_preface" />
         
@@ -92,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_review_preface" />
         
@@ -100,6 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
+            android:textSize="15sp"
             android:textColor="#dddddd"
             android:text="@string/details_ui_comments_preface" />
         

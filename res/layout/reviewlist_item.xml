@@ -31,8 +31,9 @@
             style="?android:attr/textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="15sp"
             android:layout_marginBottom="6sp"
-            android:textColor="#dddddd"
+            android:textColor="#ccc"
             android:text="@string/details_ui_authors_dummy" />
         
         

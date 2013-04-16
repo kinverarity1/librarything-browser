@@ -7,7 +7,7 @@
     <TextView
         android:id="@+id/book_list_result_detail_text"
         style="?android:attr/textAppearanceMedium"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_marginLeft="3px"
         android:layout_marginRight="3px"
         android:layout_marginTop="4px"
@@ -15,6 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/details_ui_title_dummy"
-        android:textColor="#eee" />
-
+        android:textColor="#fff" />
 </LinearLayout>
