@@ -82,5 +82,6 @@
     <string name="debug_log">None</string>
     <string name="title_activity_debug_log">View log</string>
     <string name="prefs_ui_debug_log_summary">View or send log to developer</string>
+    <string name="title_activity_advanced_search">Advanced search</string>
 
 </resources>

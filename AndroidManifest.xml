@@ -42,6 +42,7 @@
         </activity>
         <activity
             android:name="com.nietky.librarythingbrowser.BookDetailActivity"
+            android:parentActivityName=".BookListActivity"
             android:label="@string/title_book_detail" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -105,10 +106,21 @@
             android:parentActivityName="com.nietky.librarythingbrowser.PreferencesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nietky.librarythingbrowser.PreferencesActivity" /><intent-filter>
-           <action android:name="com.nietky.librarythingbrowser.DebugLog" />
-           <category android:name="android.intent.category.DEFAULT" />
-       </intent-filter>
+                android:value="com.nietky.librarythingbrowser.PreferencesActivity" />
+
+            <intent-filter>
+                <action android:name="com.nietky.librarythingbrowser.DebugLog" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.nietky.librarythingbrowser.AdvancedSearchActivity"
+            android:label="@string/title_activity_advanced_search"
+            android:parentActivityName="com.nietky.librarythingbrowser.BookListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nietky.librarythingbrowser.BookListActivity" />
         </activity>
     </application>
 

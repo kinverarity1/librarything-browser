@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/dialog_allcheck"
+			android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Select all" />
+
+        <Button
+            android:id="@+id/dialog_invert"
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Invert selection" />
+        
+    </LinearLayout>
+    <ListView
+        android:id="@+id/dialog_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

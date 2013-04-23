@@ -47,7 +47,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -117,38 +116,34 @@ public class BookListActivity extends ListActivity {
             else
                 query = intent.getStringExtra(SearchManager.QUERY);
             logger.log(TAG + METHOD, "Intent.ACTION_SEARCH query=" + query);
+            String previousIds = searchHandler.getString();
             searchHandler.restrictByQuery(query);
             setTitle(query);
-            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_TAG));
-            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_COLLECTION));
-            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_AUTHOR));
+            queryClickThroughs.add(new ClickThrough(this, query, ClickThrough.QUERY_ADVANCED, previousIds, searchHandler.getString()));
             loadList();
         } else if (intent.hasExtra("tagName")) {
             String tag = intent.getStringExtra("tagName");
             logger.log(TAG + METHOD, "Intent has an extra: tagName=" + tag);
-            searchHandler.restrictByTag(tag);
+            String previousIds = searchHandler.getString();
+            searchHandler.restrictByTag(tag); 
             setTitle(tag);
-            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_GENERAL));
-            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_COLLECTION));
-            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_AUTHOR));
+            queryClickThroughs.add(new ClickThrough(this, tag, ClickThrough.QUERY_ADVANCED, previousIds, searchHandler.getString()));
             loadList();
         } else if (intent.hasExtra("collectionName")) {
             String collection = intent.getStringExtra("collectionName");
             logger.log(TAG + METHOD, "Intent has an extra: collectionName=" + collection);
+            String previousIds = searchHandler.getString();
             searchHandler.restrictByCollection(collection);
             setTitle(collection);
-            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_GENERAL));
-            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_TAG));
-            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_AUTHOR));
+            queryClickThroughs.add(new ClickThrough(this, collection, ClickThrough.QUERY_ADVANCED, previousIds, searchHandler.getString()));
             loadList();
         } else if (intent.hasExtra("authorName")) {
             String author = intent.getStringExtra("authorName");
             logger.log(TAG + METHOD, "Intent has an extra: authorName=" + author);
+            String previousIds = searchHandler.getString();
             searchHandler.restrictByAuthor(author);
             setTitle(author);
-            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_GENERAL));
-            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_TAG));
-            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_COLLECTION));
+            queryClickThroughs.add(new ClickThrough(this, author, ClickThrough.QUERY_ADVANCED, previousIds, searchHandler.getString()));
             loadList();
         } else if (intent.hasExtra("downloadBooks")) {
             logger.log(TAG + METHOD, "Intent has an extra: downloadBooks");
@@ -311,36 +306,10 @@ public class BookListActivity extends ListActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Place an action bar item for searching.
         getMenuInflater().inflate(R.menu.options, menu);
-//        // MenuItem item = menu.add("Search");
-//        MenuItem item = menu.findItem(R.id.menuSearch);
-//        // item.setIcon(android.R.drawable.ic_menu_search);
-//        // item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-//        // SearchView sv = new SearchView(this);
-//        // sv.setOnQueryTextListener(this);
-//        // item.setActionView(sv);
-//        //
-        return true;
-    }
-    
-    public boolean launchedAsQuery () {
-        intent = getIntent();
-        if (intent.hasExtra("ids")) return true;
-        else if (intent.hasExtra("tagName")) return true;
-        else if (intent.hasExtra("collectionName")) return true;
-        else if (intent.hasExtra("authorName")) return true;
-        return false;
-    }
-    
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-//        menu.findItem(R.id.menuShowAllBooks).setVisible(launchedAsQuery());
         return true;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -381,21 +350,6 @@ public class BookListActivity extends ListActivity {
         case R.id.menuAuthors:
             startActivityWithIds(new Intent(this, AuthorListActivity.class));
             return true;
-//        case R.id.menuSort:
-//            final CharSequence[] items = {"title", "author1", "author2"};
-//
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Sort by");
-//            builder.setItems(items, new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int item) {
-//                    orderByColumn = items[item].toString();
-//                    loadList();
-//                    dialog.dismiss();
-//                }
-//            });
-//            AlertDialog alert = builder.create();
-//            alert.show();
-//            return true;
         case R.id.menuImport:
             downloadBooks();
             return true;
@@ -404,6 +358,12 @@ public class BookListActivity extends ListActivity {
             return true;
         case R.id.menuComments:
             startActivityWithIds(new Intent(this, CommentListActivity.class));
+            return true;
+        case R.id.menu_advanced_search:
+            Intent intent = new Intent(this, AdvancedSearchActivity.class);
+            intent.putExtra("ids", searchHandler.getString());
+            intent.putExtra("whereFrom", "menu");
+            startActivity(intent);
             return true;
         default:
             return false;
@@ -623,7 +583,7 @@ public class BookListActivity extends ListActivity {
         
         public int getCount() {
             String METHOD = ".getCount()";
-            int count = columns.get(0).size() + 2 + 1 + clickThroughs.size();
+            int count = columns.get(0).size() + 1 + 1 + clickThroughs.size();
 //            logger.log(TAG + METHOD, "count=" + count);
             return count;
         }
@@ -636,9 +596,9 @@ public class BookListActivity extends ListActivity {
             int viewType;
             if (position < clickThroughs.size())
                 viewType = TYPE_CLICK_THROUGH;
-            else if (position < clickThroughs.size() + 2)
+            else if (position < clickThroughs.size() + 1)
                 viewType = TYPE_RESULT_DETAIL;
-            else if (position < clickThroughs.size() + 2 + 1)
+            else if (position < clickThroughs.size() + 1 + 1)
                 viewType = TYPE_SEPARATOR;
             else 
                 viewType = TYPE_BOOK_LIST_ITEM;
@@ -646,15 +606,13 @@ public class BookListActivity extends ListActivity {
         }
         
         public int getBookListPosition(int position) {
-            // The -2 is for the result details; -1 for the separator.
-            return position - clickThroughs.size() - 2 - 1;
+            // The -1 is for the result details; -1 for the separator.
+            return position - clickThroughs.size() - 1 - 1;
         }
         
         public int getWhichResultDetail(int position) {
             int viewType = -1;
             if (position == (clickThroughs.size()))
-                viewType = DETAIL_SEARCH;
-            else if (position == (clickThroughs.size() + 1))
                 viewType = DETAIL_RESULTS;
             return viewType;
         }
@@ -757,20 +715,28 @@ public class BookListActivity extends ListActivity {
         static final int QUERY_COLLECTION = 1;
         static final int QUERY_AUTHOR = 2;
         static final int QUERY_GENERAL = 4;
+        static final int QUERY_ADVANCED = 5;
         
         int queryType;
         Context context; 
         String query;
+        String allIds;
+        String subsetIds;
         
-        public ClickThrough (Context context, String query, int queryType) {
+        public ClickThrough (Context context, String query, int queryType, String allIds, String subsetIds) {
             this.context = context;
             this.queryType = queryType;
             this.query = query;
+            this.allIds = allIds;
+            this.subsetIds = subsetIds;
         }
         
         public String getViewText () {
             String text = "";
             switch (queryType) {
+            case QUERY_ADVANCED:
+                text = "Advanced search for " + query + "...";
+                break;
             case QUERY_GENERAL:
                 text = "Search for " + query;
                 break;
@@ -789,7 +755,10 @@ public class BookListActivity extends ListActivity {
         
         public Intent getIntent () {
             Intent intent = new Intent();
-            intent.setClass(context, BookListActivity.class);
+            if (queryType == QUERY_ADVANCED)
+                intent.setClass(context, AdvancedSearchActivity.class);
+            else 
+                intent.setClass(context, BookListActivity.class);
             switch (queryType) {
                 case QUERY_GENERAL:
                     intent.setAction(Intent.ACTION_SEARCH);
@@ -803,6 +772,12 @@ public class BookListActivity extends ListActivity {
                     break;
                 case QUERY_AUTHOR:
                     intent.putExtra("authorName", query);
+                    break;
+                case QUERY_ADVANCED:
+                    intent.putExtra("query", query);
+                    intent.putExtra("allIds", allIds);
+                    intent.putExtra("subsetIds", subsetIds);
+                    intent.putExtra("whereFrom", "searchQuery");
                     break;
             }
             return intent;

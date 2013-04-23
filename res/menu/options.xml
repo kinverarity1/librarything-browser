@@ -29,7 +29,10 @@
         android:id="@+id/menuComments"
         android:showAsAction="ifRoom"
         android:title="@string/menu_comments" />
-    
+	<item
+	    android:id="@+id/menu_advanced_search"
+    	android:showAsAction="ifRoom"
+    	android:title="Advanced search" />
 	<item
 	    android:id="@+id/menuShowAllBooks"
     	android:showAsAction="ifRoom"

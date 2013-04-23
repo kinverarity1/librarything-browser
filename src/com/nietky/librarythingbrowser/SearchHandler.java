@@ -21,20 +21,16 @@ public class SearchHandler {
 
     public SearchHandler(Context context) {
         String METHOD = ".constructor(Context): ";
-        
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        _context = context;
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context);
         logger = new LogHandler(sharedPref);
         logger.log(TAG + METHOD, "Start");
-        
-        _context = context;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());
-        logger = new LogHandler(sharedPref);
-        
+       
         _ids = new ArrayList<Integer> ();
     }
     
     public void openDbHelper() {
-        dbHelper = new DbHelperNew(_context.getApplicationContext());
+        dbHelper = new DbHelperNew(_context);
         dbHelper.open();
     }
     

@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context=".AdvancedSearchActivity" >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/advanced_search_query_text_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search for: "
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/advanced_search_query_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="e.g. Napoleon"
+            android:ems="10" >
+
+            <requestFocus />
+        </EditText>
+        
+    </LinearLayout>
+    
+        <CheckBox
+            android:id="@+id/advanced_search_restrict_ids_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restrict to books shown on previous screen" />
+    
+    <LinearLayout
+        android:id="@+id/advanced_search_fields_horiz_linearlayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <Button
+            android:id="@+id/advanced_search_select_fields_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select fields to search" />
+        
+        </LinearLayout>
+    
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/advanced_search_collections_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restrict by collections" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/advanced_search_collections_horiz_linearlayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        
+        </LinearLayout>
+        
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/advanced_search_tags_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restrict by tags" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/advanced_search_tags_horiz_linearlayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        
+        </LinearLayout>
+    
+    <Button
+            android:id="@+id/advanced_search_SEARCH_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+     
+    
+    
+    
+</LinearLayout>
