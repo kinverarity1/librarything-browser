@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,7 +44,7 @@ public class AdvancedSearchActivity extends FragmentActivity {
         if (whereFrom.contains("menu"))
             checkBox.setText("Restrict to books shown on previous screen");
         else if (whereFrom.contains("searchQuery"))
-            checkBox.setText("Refine previous search rather than starting afresh");
+            checkBox.setText(Html.fromHtml("Refine search <i>results</i> rather than the original search"));
 
         SearchHandler searchHandler = new SearchHandler(this);
         searchHandler.setIds();

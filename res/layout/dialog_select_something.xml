@@ -25,6 +25,13 @@
             android:text="Invert selection" />
         
     </LinearLayout>
+    
+    <CheckBox
+            android:id="@+id/dialog_save_as_default_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="Save as default choices" />
     <ListView
         android:id="@+id/dialog_list"
         android:layout_width="match_parent"
