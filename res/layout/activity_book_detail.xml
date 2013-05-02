@@ -1,4 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/book_detail_main_layout"
+    android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -128,6 +131,43 @@
             android:text="@string/details_ui_private_comments_preface"
             android:textSize="15sp"
              />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+            android:id="@+id/book_detail_notes_header"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="6dp"
+            android:textColor="#fff"
+            android:text="Your notes:"
+            android:textSize="16sp"
+             />
+            <Button
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save note"
+                android:onClick="saveNote"
+                />
+            
+        </LinearLayout>
+        
+        
+        <EditText
+            android:id="@+id/book_detail_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="1"
+            android:maxLines="20"
+            android:textSize="16sp"
+            android:hint="Add notes here"
+            />
+        
+        
+        
     </LinearLayout>
 
 </ScrollView>

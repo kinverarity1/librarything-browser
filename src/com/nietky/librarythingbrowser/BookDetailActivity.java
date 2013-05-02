@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BookDetailActivity extends Activity {
     String TAG = "BookDetailActivity";
@@ -36,6 +37,9 @@ public class BookDetailActivity extends Activity {
     Cursor cursor;
     Context context;
     HashMap<String, String> fields;
+    
+    NotesDbHelper notesDbHelper;
+    EditText notesView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,6 +235,28 @@ public class BookDetailActivity extends Activity {
         registerForContextMenu(review);
         registerForContextMenu(comments);
         registerForContextMenu(commentsPrivate);
+        
+        notesView = (EditText) findViewById(R.id.book_detail_notes);
+        notesDbHelper = new NotesDbHelper(context);
+        notesDbHelper.open();
+        String note = notesDbHelper.getNote(Integer.valueOf(fields.get("book_id")));
+        Log.d(TAG + METHOD, "note=" + note);
+        if (!note.contains("NONE"))
+            notesView.setText(note);
+        notesDbHelper.close();
+        
+        findViewById(R.id.book_detail_main_layout).requestFocus();
+    }
+    
+    public void saveNote (View v) {
+        String METHOD = ".saveNote()";
+        Log.d(TAG + METHOD, "Start");
+        String note = notesView.getText().toString();
+        notesDbHelper.open();
+        long result = notesDbHelper.setNote(Integer.valueOf(fields.get("book_id")), note);
+        notesDbHelper.close();
+        if (result != -1)
+            Toast.makeText(this, "note saved", Toast.LENGTH_SHORT).show();
     }
     
     @Override
