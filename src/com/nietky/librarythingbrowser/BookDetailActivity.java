@@ -146,34 +146,46 @@ public class BookDetailActivity extends Activity {
                 getString(R.string.details_ui_collections_preface), collectionNames, "collectionName",
                 R.drawable.rounded_edges_collection);
 
+        TextView DDC = (TextView) findViewById(R.id.book_detail_DDC);
+        if (fields.get("DDC").length() > 0)
+            DDC.setText("DDC: " + fields.get("DDC"));
+        else
+            DDC.setVisibility(View.GONE);
+        
+        TextView LCC = (TextView) findViewById(R.id.book_detail_LCC);
+        if (fields.get("LCC").length() > 0)
+            LCC.setText("LCC: " + fields.get("LCC"));
+        else
+            LCC.setVisibility(View.GONE);
+        
         TextView dateEntered = (TextView) findViewById(R.id.book_detail_date_entered);
         if (fields.get("date_entered").length() > 0) {
-            dateEntered.setText(FormatText.asHtml(getString(R.string.details_ui_date_entered_preface) + fields.get("date_entered")));
+            dateEntered.setText(FormatText.asHtml("Date entered: " + fields.get("date_entered")));
         } else {
             dateEntered.setVisibility(View.GONE);
         }
         TextView dateAcquired = (TextView) findViewById(R.id.book_detail_date_acquired);
         if (fields.get("date_acquired").length() > 0) {
-            dateAcquired.setText(FormatText.asHtml(getString(R.string.details_ui_date_acquired_preface) + fields.get("date_acquired")));
+            dateAcquired.setText(FormatText.asHtml("Date acquired: " + fields.get("date_acquired")));
         } else {
             dateAcquired.setVisibility(View.GONE);
         }
         TextView dateStarted = (TextView) findViewById(R.id.book_detail_date_started);
         if (fields.get("date_started").length() > 0) {
-            dateStarted.setText(FormatText.asHtml(getString(R.string.details_ui_date_started_preface) + fields.get("date_started")));
+            dateStarted.setText(FormatText.asHtml("Date started: " + fields.get("date_started")));
         } else {
             dateStarted.setVisibility(View.GONE);
         }
         TextView dateEnded = (TextView) findViewById(R.id.book_detail_date_ended);
         if (fields.get("date_ended").length() > 0) {
-            dateEnded.setText(FormatText.asHtml(getString(R.string.details_ui_date_ended_preface) + fields.get("date_ended")));
+            dateEnded.setText(FormatText.asHtml("Date finished: " + fields.get("date_ended")));
         } else {
             dateEnded.setVisibility(View.GONE);
         }
         
         TextView review = (TextView) findViewById(R.id.book_detail_review);
         if (fields.get("review").length() > 0) {
-            review.setText(FormatText.asHtml("<p><b>" + getString(R.string.details_ui_review_preface) + "</b> " + fields.get("review")));
+            review.setText(FormatText.asHtml("<p><b>Review:</b> " + fields.get("review")));
         } else {
             review.setVisibility(View.GONE);
         }
@@ -188,16 +200,14 @@ public class BookDetailActivity extends Activity {
 
         TextView comments = (TextView) findViewById(R.id.book_detail_comments);
         if (fields.get("comments").length() > 0) {
-            comments.setText(FormatText.asHtml("<p><b>" + getString(R.string.details_ui_comments_preface) + "</b> "
-                    + fields.get("comments")));
+            comments.setText(FormatText.asHtml("<p><b>Comments:</b> " + fields.get("comments")));
         } else {
             comments.setVisibility(View.GONE);
         }
 
         TextView commentsPrivate = (TextView) findViewById(R.id.book_detail_comments_private);
         if (fields.get("comments_private").length() > 0) {
-            commentsPrivate.setText(FormatText.asHtml("<p><b>" + getString(R.string.details_ui_private_comments_preface) + "</b> "
-                            + fields.get("comments_private")));
+            commentsPrivate.setText(FormatText.asHtml("<p><b>Private comments:</b> " + fields.get("comments_private")));
         } else {
             commentsPrivate.setVisibility(View.GONE);
         }
