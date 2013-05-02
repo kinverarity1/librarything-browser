@@ -5,7 +5,9 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -13,10 +15,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RatingBar;
@@ -211,7 +217,46 @@ public class BookDetailActivity extends Activity {
         } else {
             commentsPrivate.setVisibility(View.GONE);
         }
-
+             
+//        registerForContextMenu();
+        registerForContextMenu(titleView);
+        registerForContextMenu(authorView);
+        registerForContextMenu(publication);
+        registerForContextMenu(DDC);
+        registerForContextMenu(LCC);
+        registerForContextMenu(dateEntered);
+        registerForContextMenu(dateAcquired);
+        registerForContextMenu(dateStarted);
+        registerForContextMenu(dateEnded);
+        registerForContextMenu(review);
+        registerForContextMenu(comments);
+        registerForContextMenu(commentsPrivate);
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        TextView tv = (TextView) v;
+        AlertDialog.Builder editalert = new AlertDialog.Builder(this);
+        final EditText input = new EditText(this);
+        input.setTextSize(15);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.FILL_PARENT,
+                LinearLayout.LayoutParams.FILL_PARENT);
+        input.setLayoutParams(lp);
+        editalert.setView(input);
+        input.setText(tv.getText());
+        editalert.setPositiveButton("Copy all", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
+                clipboard.setText(input.getText());
+            }
+        });
+        editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        editalert.show();
     }
 
     public void addLabels(LinearLayout ll, String prefix,
