@@ -285,33 +285,33 @@ public class SearchHandler {
     }
     
     public static class BookProperty {
-        public Integer id;
+        public String id;
         public String property;
         public ArrayList<String> otherData;
         
-        public BookProperty (Integer id, String property, ArrayList<String> otherData) {
+        public BookProperty (String id, String property, ArrayList<String> otherData) {
             this.id = id;
             this.property = property;
             this.otherData = otherData;
         }
     }
     
-    public void sortByDate (String columnName) {
-        String METHOD = ".sortByDate(columnName = " + columnName + ")";
-        ArrayList<String> dates = getColumnArray(columnName);
-        ArrayList<BookProperty> books = new ArrayList<BookProperty>();
-        ArrayList<Integer> ids = getIds();
-        for (int i = 0; i < dates.size(); i++) {
-            books.add(new BookProperty(ids.get(i), dates.get(i), null));
-        }
-        logger.log(TAG + METHOD, "ids[0]=" + ids.get(0) + ", [-1]=" + ids.get(ids.size() - 1));
-        Collections.sort(books, new DateComparator(false));
-        ArrayList<Integer> newIds = new ArrayList<Integer>();
-        for (int i = 0; i < books.size(); i++)
-            newIds.add(books.get(i).id);
-        logger.log(TAG + METHOD, "newIds[0]=" + newIds.get(0) + ", [-1]=" + newIds.get(newIds.size() - 1));
-        setIds(newIds);
-    }
+//    public void sortByDate (String columnName) {
+//        String METHOD = ".sortByDate(columnName = " + columnName + ")";
+//        ArrayList<String> dates = getColumnArray(columnName);
+//        ArrayList<BookProperty> books = new ArrayList<BookProperty>();
+//        ArrayList<Integer> ids = getIds();
+//        for (int i = 0; i < dates.size(); i++) {
+//            books.add(new BookProperty(ids.get(i), dates.get(i), null));
+//        }
+//        logger.log(TAG + METHOD, "ids[0]=" + ids.get(0) + ", [-1]=" + ids.get(ids.size() - 1));
+//        Collections.sort(books, new DateComparator(false));
+//        ArrayList<Integer> newIds = new ArrayList<Integer>();
+//        for (int i = 0; i < books.size(); i++)
+//            newIds.add(books.get(i).id);
+//        logger.log(TAG + METHOD, "newIds[0]=" + newIds.get(0) + ", [-1]=" + newIds.get(newIds.size() - 1));
+//        setIds(newIds);
+//    }
     
     public static class DateComparator implements Comparator<BookProperty> {
         static HashMap<String,String> dateMap = new HashMap<String,String>();        
@@ -377,6 +377,14 @@ public class SearchHandler {
                 d2 = d1;
                 d1 = temp;
             }
+            if (d1.trim().length() == 0)
+                if (d2.trim().length() == 0)
+                    return 0;
+                else {
+                    return 1;
+                }
+            if (d2.trim().length() == 0)
+                return -1;
             return d1.toLowerCase().compareTo(d2.toLowerCase());
         }
     }

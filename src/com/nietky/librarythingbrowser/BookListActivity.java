@@ -45,13 +45,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -193,6 +192,7 @@ public class BookListActivity extends ListActivity {
         adapter.sortAdapter(columnNames, sortBy, sortReverse);
         getListView().setFastScrollEnabled(true);
         setListAdapter(adapter);
+        searchHandler.setIds(adapter.getSortedIds());
     }
     
     public void downloadBooks() {
@@ -607,12 +607,18 @@ public class BookListActivity extends ListActivity {
         LayoutInflater inflater;
         ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
         ArrayList<ClickThrough> clickThroughs = new ArrayList<ClickThrough>();
+        ArrayList<Integer> sortedIds;
         
         public BookListAdapter (Context context, String[] columnNames, ArrayList<ClickThrough> clickThroughs, String sortBy, boolean sortReverse) {
             String METHOD = ".BookListAdapter(clickThroughs.size()=" + clickThroughs.size() + ")";
             this.context = context;
             inflater = LayoutInflater.from(context);
-            columns.add(new ArrayList<String>(Arrays.asList(searchHandler.getString().split(","))));
+//            columns.add(new ArrayList<String>(Arrays.asList(searchHandler.getString().split(","))));
+//            List<String> ids = new ArrayList<String>();
+//            for (int i = 0; i < searchHandler.size(); i++) {
+//                ids.add(searchHandler.getId(i))
+//            }
+            columns.add(searchHandler.getColumnArray("_id"));
             columns.add(searchHandler.getColumnArray(sortBy));
             for (int i = 0; i < columnNames.length; i++) {
                 columns.add(searchHandler.getColumnArray(columnNames[i]));
@@ -628,26 +634,29 @@ public class BookListActivity extends ListActivity {
                 for (int j = 0; j < columnNames.length; j++) {
                     otherData.add(columns.get(j + 2).get(i));
                 }
-                books.add(new SearchHandler.BookProperty(Integer.valueOf(columns.get(0).get(i)), columns.get(1).get(i), otherData));
+                books.add(new SearchHandler.BookProperty(columns.get(0).get(i), columns.get(1).get(i), otherData));
             }
             if (sortBy.startsWith("date_"))
                 Collections.sort(books, new SearchHandler.DateComparator(sortReverse));
             else
                 Collections.sort(books, new SearchHandler.StringComparator(sortReverse));
-            ArrayList<Integer> sortedIds = new ArrayList<Integer>();
+            sortedIds = new ArrayList<Integer>();
             for (int i = 0; i < books.size(); i++) {
-                Integer id = books.get(i).id;
-                sortedIds.add(id);
-                columns.get(0).set(i, id.toString());
+                String id = books.get(i).id;
+                sortedIds.add(Integer.valueOf(id));
+                columns.get(0).set(i, id);
                 columns.get(1).set(i, books.get(i).property);
                 for (int j = 0; j < columnNames.length; j++) {
                     columns.get(j + 2).set(i, books.get(i).otherData.get(j));
                 }
             }
-            searchHandler.setIds(sortedIds);
             if (clickThroughs.size() > 0)
                 TYPES += 1;
             this.clickThroughs = clickThroughs;
+        }
+        
+        public ArrayList<Integer> getSortedIds () {
+            return sortedIds;
         }
         
         public int getCount() {
@@ -759,8 +768,10 @@ public class BookListActivity extends ListActivity {
         int viewType = adapter.getItemViewType(position);
         if (viewType == adapter.TYPE_BOOK_LIST_ITEM) {
             String bookId = adapter.columns.get(0).get(adapter.getBookListPosition(position));
+            String SHid = String.valueOf(searchHandler.getId(adapter.getBookListPosition(position)));
+            Log.d(TAG + METHOD, "bookId=" + bookId + ", SHid=" + SHid);
             Intent intent = new Intent(this, BookDetailActivity.class);
-            intent.putExtra("_id", bookId);
+            intent.putExtra("_id", SHid);
             intent.putExtra("ids", searchHandler.getString());
             startActivity(intent);
         } else if (viewType == adapter.TYPE_CLICK_THROUGH) {
