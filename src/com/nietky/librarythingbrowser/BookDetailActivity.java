@@ -35,7 +35,7 @@ public class BookDetailActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String METHOD = "-onCreate():";
+        String METHOD = ".onCreate()";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
@@ -63,13 +63,14 @@ public class BookDetailActivity extends Activity {
                 "encoding" };
         for (int i = 0; i < fieldnames.length; i += 1) {
             fieldname = fieldnames[i];
-//            Log.d(TAG, "Getting content for fieldname=" + fieldname);
             int index = cursor.getColumnIndex(fieldname);
             String content = "";
             if (index > -1)
                 content = cursor.getString(index);
+//            Log.d(TAG + METHOD, "pre-trim: fieldname=" + fieldname + "=" + content);
             content = content.replace("[return]", "\n");
             content = content.trim();
+//            Log.d(TAG + METHOD, "post-trim: fieldname=" + fieldname + "=" + content);
             fields.put(fieldname, content);
         }
         dbHelper.close();

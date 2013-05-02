@@ -34,6 +34,10 @@
     	android:showAsAction="ifRoom"
     	android:title="Advanced search" />
 	<item
+	    android:id="@+id/menuSortBy"
+	    android:showAsAction="ifRoom"
+	    android:title="Sort books by..." />
+	<item
 	    android:id="@+id/menuShowAllBooks"
     	android:showAsAction="ifRoom"
     	android:title="@string/menu_show_all_books" />

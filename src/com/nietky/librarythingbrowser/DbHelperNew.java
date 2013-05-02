@@ -93,7 +93,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
     }
 
     public void addRow(String[] values) {
-        String METHOD = ".addRow: ";
+        String METHOD = ".addRow()";
 //        Log.d(TAG + METHOD, "start");
         
 //        Log.d(TAG, KEYS.length + " key labels; " + values.length + " values.");
@@ -137,6 +137,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
+//                Log.d(TAG + METHOD, "query = " + sql);
                 Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {
@@ -162,6 +163,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
+//                Log.d(TAG + METHOD, "query = " + sql);
                 Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {
@@ -217,5 +219,5 @@ public class DbHelperNew extends SQLiteOpenHelper {
         Cursor cursor = Db.rawQuery(sql, null);
         return cursor;
     }
-
+    
 }

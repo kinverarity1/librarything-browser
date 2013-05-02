@@ -9,7 +9,12 @@
         android:key="highlight_unread"
         android:title="Highlight unread books" />
     -->
-
+	<ListPreference 
+	    android:key="sortBy"
+	    android:title="Sort books by"
+	    android:entries="@array/sort_by_readable"
+	    android:entryValues="@array/sort_by_raw"
+	    />
     <CheckBoxPreference
         android:enabled="true"
         android:key="search_publication"

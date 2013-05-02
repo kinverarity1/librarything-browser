@@ -3,17 +3,18 @@ package com.nietky.librarythingbrowser;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,29 +23,61 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class AdvancedSearchActivity extends FragmentActivity {
+public class AdvancedSearchActivity extends Activity {
     public static final String TAG = "AdvancedSearchActivity";
-
+    SharedPreferences sharedPref;
+    LogHandler logger;
+    
     String allIds = "";
     String subsetIds = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String METHOD = ".onCreate()";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advanced_search);
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        logger = new LogHandler(sharedPref);
+        logger.log(TAG + METHOD, "Start");
 
         Intent intent = getIntent();
 
         CheckBox checkBox = (CheckBox) findViewById(R.id.advanced_search_restrict_ids_checkbox);
-        String whereFrom = intent.getStringExtra("whereFrom");
-        Log.d(TAG, "whereFrom = " + whereFrom);
+        final String whereFrom = intent.getStringExtra("whereFrom");
+        logger.log(TAG, "whereFrom = " + whereFrom);
+        if (checkBox.isChecked())
+            checkBox.setChecked(true);
+        else
+            checkBox.setChecked(false);
+        
         if (whereFrom.contains("menu"))
             checkBox.setText("Restrict to books shown on previous screen");
         else if (whereFrom.contains("searchQuery"))
             checkBox.setText(Html.fromHtml("Refine search <i>results</i> rather than the original search"));
+        
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (whereFrom.contains("menu")) {
+                        buttonView.setText("Within books shown on previous screen");
+                    } else
+                        buttonView.setText("In all books");
+                } else {
+                    if (whereFrom.contains("searchQuery"))
+                        buttonView.setText("Within search <i>results</i>");
+                    else
+                        buttonView.setText("Modify original search");
+                }
+            }
+        });
+
+
 
         SearchHandler searchHandler = new SearchHandler(this);
         searchHandler.setIds();
@@ -69,41 +102,30 @@ public class AdvancedSearchActivity extends FragmentActivity {
         Button selectFields = (Button) findViewById(R.id.advanced_search_select_fields_button);
         selectFields.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                SelectItemsDialogFragment dialogFragment = new SelectItemsDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", 0);
-                bundle.putString("ids", getSearchIds());
-
-                dialogFragment.setArguments(bundle);
-                dialogFragment
-                        .show(getSupportFragmentManager(), "selectFields");
+                Intent intent = new Intent(getApplicationContext(), SelectItemsActivity.class);
+                intent.putExtra("type", SelectItemsActivity.TYPE_FIELDS);
+                intent.putExtra("ids", getSearchIds());
+                startActivityForResult(intent, 0);
             }
         });
 
         Button restrictCollections = (Button) findViewById(R.id.advanced_search_collections_button);
         restrictCollections.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                SelectItemsDialogFragment dialogFragment = new SelectItemsDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("type",
-                        SelectItemsDialogFragment.TYPE_COLLECTIONS);
-                bundle.putString("ids", getSearchIds());
-                dialogFragment.setArguments(bundle);
-                dialogFragment.show(getSupportFragmentManager(),
-                        "restrictCollections");
+                Intent intent = new Intent(getApplicationContext(), SelectItemsActivity.class);
+                intent.putExtra("type", SelectItemsActivity.TYPE_COLLECTIONS);
+                intent.putExtra("ids", getSearchIds());
+                startActivityForResult(intent, 0);
             }
         });
 
         Button restrictTags = (Button) findViewById(R.id.advanced_search_tags_button);
         restrictTags.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                SelectItemsDialogFragment dialogFragment = new SelectItemsDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", SelectItemsDialogFragment.TYPE_TAGS);
-                bundle.putString("ids", getSearchIds());
-                dialogFragment.setArguments(bundle);
-                dialogFragment
-                        .show(getSupportFragmentManager(), "restrictTags");
+                Intent intent = new Intent(getApplicationContext(), SelectItemsActivity.class);
+                intent.putExtra("type", SelectItemsActivity.TYPE_TAGS);
+                intent.putExtra("ids", getSearchIds());
+                startActivityForResult(intent, 0);
             }
         });
     }

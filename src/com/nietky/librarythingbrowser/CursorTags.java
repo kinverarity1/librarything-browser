@@ -1,6 +1,7 @@
 package com.nietky.librarythingbrowser;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import android.database.Cursor;
 
@@ -56,6 +57,9 @@ public class CursorTags {
         return authorsArray;
     }
     
-    
-    
+    public static class LowercaseAlphaComparator implements Comparator<String> {
+        public int compare(String s1, String s2) {
+            return s1.toLowerCase().compareTo(s2.toLowerCase());
+        }
+    }
 }

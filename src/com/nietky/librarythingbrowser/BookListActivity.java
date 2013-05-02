@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +50,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -159,11 +163,22 @@ public class BookListActivity extends ListActivity {
         _ids = searchHandler.getIds();
     }
     
+    public void onResume () {
+        super.onResume();
+        loadList();
+    }
+    
     public void loadList() {
         String METHOD = ":loadList(): ";
         logger.log(TAG + METHOD, "start");
-        
         cursor = searchHandler.getCursor();
+        
+        String sortBy = sharedPref.getString("sortBy", "date_entered");
+        boolean sortReverse = false;
+        if (sortBy.endsWith("_r")) {
+            sortBy = sortBy.substring(0, sortBy.length() - 2);
+            sortReverse = true;
+        }
         
         if (cursor.getCount() == 0) {
             SearchHandler testSearchHandler = new SearchHandler(this);
@@ -171,13 +186,11 @@ public class BookListActivity extends ListActivity {
             if (testSearchHandler.getIds().size() == 0) {
                 Intent in = new Intent(this, LoginActivity.class);
                 startActivity(in);
-            } else {
-                
             }
         }
-        
-//        adapter = new BookListCursorAdapter(this, cursor);
-        adapter = new BookListAdapter(this, new String[] {"title", "author2"}, queryClickThroughs);
+        String[] columnNames = new String[] {"title", "author2"};
+        adapter = new BookListAdapter(this, columnNames, queryClickThroughs, sortBy, sortReverse);
+        adapter.sortAdapter(columnNames, sortBy, sortReverse);
         getListView().setFastScrollEnabled(true);
         setListAdapter(adapter);
     }
@@ -263,7 +276,7 @@ public class BookListActivity extends ListActivity {
         @SuppressWarnings("static-access")
         @Override
         protected String doInBackground(List<String[]>... csvDatas) {
-            String METHOD = ":ImportBooksTask:doInBackground(...): ";
+            String METHOD = ".ImportBooksTask:doInBackground()";
             logger.log(TAG + METHOD, "start");
             
             List<String[]> csvData = csvDatas[0];
@@ -280,6 +293,8 @@ public class BookListActivity extends ListActivity {
                     for (int j = 0; j < (csvRowShort.length); j++) {
                         csvRowShort[j] = csvRow[j];
                     }
+//                    for (int j = 0; j < csvRowShort.length; j++)
+//                        Log.d(TAG + METHOD, "i=" + i + " j=" + j + " value=" + csvRowShort[j]);
                     dbHelper.addRow(csvRowShort);
                     dbHelper.Db.yieldIfContendedSafely();
                     dialog.setProgress(i);
@@ -355,6 +370,31 @@ public class BookListActivity extends ListActivity {
             return true;
         case R.id.menuReviews:
             startActivityWithIds(new Intent(this, ReviewListActivity.class));
+            return true;
+        case R.id.menuSortBy:
+            String sortBy = sharedPref.getString("sortBy", "date_entered");
+            String[] rawChoices = getResources().getStringArray(R.array.sort_by_raw);
+            int defaultItem = 0;
+            for (int i = 0; i < rawChoices.length; i++) {
+                if (rawChoices[i].contains(sortBy)) {
+                    defaultItem = i;
+                    break;
+                }
+            }
+            new AlertDialog.Builder(this)
+                           .setSingleChoiceItems(getResources().getStringArray(R.array.sort_by_readable), defaultItem, null)
+                           .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int whichButton) {
+                                   int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                   dialog.dismiss();
+                                   String[] sortChoices = getResources().getStringArray(R.array.sort_by_raw);
+                                   prefsEdit = sharedPref.edit();
+                                   prefsEdit.putString("sortBy", sortChoices[selectedPosition]);
+                                   prefsEdit.commit();
+                                   loadList();
+                               }
+                           })
+                           .show();
             return true;
         case R.id.menuComments:
             startActivityWithIds(new Intent(this, CommentListActivity.class));
@@ -568,17 +608,46 @@ public class BookListActivity extends ListActivity {
         ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
         ArrayList<ClickThrough> clickThroughs = new ArrayList<ClickThrough>();
         
-        public BookListAdapter (Context context, String[] columnNames, ArrayList<ClickThrough> clickThroughs) {
+        public BookListAdapter (Context context, String[] columnNames, ArrayList<ClickThrough> clickThroughs, String sortBy, boolean sortReverse) {
             String METHOD = ".BookListAdapter(clickThroughs.size()=" + clickThroughs.size() + ")";
             this.context = context;
-            inflater = LayoutInflater.from(context);            
+            inflater = LayoutInflater.from(context);
+            columns.add(new ArrayList<String>(Arrays.asList(searchHandler.getString().split(","))));
+            columns.add(searchHandler.getColumnArray(sortBy));
             for (int i = 0; i < columnNames.length; i++) {
                 columns.add(searchHandler.getColumnArray(columnNames[i]));
             }
+            this.sortAdapter(columnNames, sortBy, sortReverse);
+//            logger.log(TAG + METHOD, "TYPES=" + TYPES);
+        }
+        
+        public void sortAdapter (String[] columnNames, String sortBy, boolean sortReverse) {
+            ArrayList<SearchHandler.BookProperty> books = new ArrayList<SearchHandler.BookProperty>();
+            for (int i = 0; i < columns.get(0).size(); i++) {
+                ArrayList<String> otherData = new ArrayList<String>();
+                for (int j = 0; j < columnNames.length; j++) {
+                    otherData.add(columns.get(j + 2).get(i));
+                }
+                books.add(new SearchHandler.BookProperty(Integer.valueOf(columns.get(0).get(i)), columns.get(1).get(i), otherData));
+            }
+            if (sortBy.startsWith("date_"))
+                Collections.sort(books, new SearchHandler.DateComparator(sortReverse));
+            else
+                Collections.sort(books, new SearchHandler.StringComparator(sortReverse));
+            ArrayList<Integer> sortedIds = new ArrayList<Integer>();
+            for (int i = 0; i < books.size(); i++) {
+                Integer id = books.get(i).id;
+                sortedIds.add(id);
+                columns.get(0).set(i, id.toString());
+                columns.get(1).set(i, books.get(i).property);
+                for (int j = 0; j < columnNames.length; j++) {
+                    columns.get(j + 2).set(i, books.get(i).otherData.get(j));
+                }
+            }
+            searchHandler.setIds(sortedIds);
             if (clickThroughs.size() > 0)
                 TYPES += 1;
             this.clickThroughs = clickThroughs;
-//            logger.log(TAG + METHOD, "TYPES=" + TYPES);
         }
         
         public int getCount() {
@@ -674,8 +743,8 @@ public class BookListActivity extends ListActivity {
                     }
                     break;
                 case TYPE_BOOK_LIST_ITEM:
-                    holder.title.setText(FormatText.asHtml(columns.get(0).get(getBookListPosition(position))));
-                    holder.subtitle.setText(FormatText.asHtml(columns.get(1).get(getBookListPosition(position))));
+                    holder.title.setText(FormatText.asHtml(columns.get(2).get(getBookListPosition(position))));
+                    holder.subtitle.setText(FormatText.asHtml(columns.get(3).get(getBookListPosition(position))));
                     break;
             }
             return convertView;
@@ -689,11 +758,9 @@ public class BookListActivity extends ListActivity {
         super.onListItemClick(listView, view, position, id);
         int viewType = adapter.getItemViewType(position);
         if (viewType == adapter.TYPE_BOOK_LIST_ITEM) {
-            logger.log(TAG + METHOD, "clicked on TYPE_BOOK_LIST_ITEM");
-            cursor.moveToPosition(adapter.getBookListPosition(position));
-            String _id = cursor.getString(cursor.getColumnIndex("_id"));
+            String bookId = adapter.columns.get(0).get(adapter.getBookListPosition(position));
             Intent intent = new Intent(this, BookDetailActivity.class);
-            intent.putExtra("_id", _id);
+            intent.putExtra("_id", bookId);
             intent.putExtra("ids", searchHandler.getString());
             startActivity(intent);
         } else if (viewType == adapter.TYPE_CLICK_THROUGH) {
@@ -735,7 +802,7 @@ public class BookListActivity extends ListActivity {
             String text = "";
             switch (queryType) {
             case QUERY_ADVANCED:
-                text = "Advanced search for " + query + "...";
+                text = "Advanced search...";
                 break;
             case QUERY_GENERAL:
                 text = "Search for " + query;

@@ -1,8 +1,6 @@
 package com.nietky.librarythingbrowser;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,22 +52,14 @@ public class LoginActivity extends Activity {
         return true;
     }
     
-    @SuppressWarnings("unused")
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.menuPreferences:
-            goToPreferences();
+            startActivity(new Intent(this, PreferencesActivity.class));
             return true;
         default:
             return false;
         }
-    }
-
-    public void goToPreferences() {
-        String METHOD = ".goToPreferences()";
-        Intent i = new Intent(this, PreferencesActivity.class);
-        startActivity(i);
     }
     
     public void downloadLibrary (View view) {
@@ -86,10 +76,7 @@ public class LoginActivity extends Activity {
         prefsEdit.putString("lt_password", LTPassword);
         prefsEdit.commit();
         
-        Intent in = new Intent(this, BookListActivity.class);
-        in.putExtra("downloadBooks", true);
-        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(in);
-        finish();
+        ImportTask importTask = new ImportTask(this);
+        importTask.execute();
     }
 }
