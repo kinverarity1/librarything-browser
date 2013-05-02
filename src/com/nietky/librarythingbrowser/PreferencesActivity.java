@@ -4,21 +4,26 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.DialogPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class PreferencesActivity extends PreferenceActivity  {
     String TAG = "PreferencesActivity";
-    SharedPreferences sharedPref;
     LogHandler logger;
+    
+    SharedPreferences sharedPref;
     
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         
         PackageInfo pInfo = null;
         try {
@@ -33,20 +38,35 @@ public class PreferencesActivity extends PreferenceActivity  {
         prefAboutVersion.setTitle(getString(R.string.preferences_ui_version) + " " + versionNumber + "vc" + versionCode);
         
         Preference prefLastDownloaded = (Preference) findPreference("last_download");
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefLastDownloaded.setSummary(sharedPrefs.getString("last_download_summary", ""));
+        prefLastDownloaded.setSummary(sharedPref.getString("last_download_summary", ""));
         
-//        DialogPreference debugLog = (DialogPreference) findPreference("debug_dialog_pref");
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-//        debugLog.setDialogMessage(sharedPref.getString("debug_log", "No log."));
-//        
-//
-//        <DialogPreference
-//            android:key="debug_dialog_pref"
-//            android:dialogTitle="Log for debugging"
-//            android:dialogMessage="The log goes here"
-//            android:positiveButtonText="OK"
-//            android:negativeButtonText="Cancel" />
+        ListPreference prefSortBy = (ListPreference) findPreference("sortBy");
+        prefSortBy.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                updateSortBySummary(true, (String) newValue);
+                return true;
+            }
+        });
+        updateSortBySummary(false, sharedPref.getString("sortBy", ""));
+    }
+    
+    public void updateSortBySummary (boolean changed, String newKey) {
+        
+        ListPreference prefSortBy = (ListPreference) findPreference("sortBy");
+        String sortBy = newKey;
+        String sortByReadable = "";
+        String[] rawChoices = getResources().getStringArray(R.array.sort_by_raw);
+        String[] readableChoices = getResources().getStringArray(R.array.sort_by_readable);
+        for (int i = 0; i < rawChoices.length; i++) {
+            if (sortBy.matches(rawChoices[i])) {
+                sortByReadable = readableChoices[i];
+                break;
+            }
+        }
+        String summary = sortByReadable;
+        if (changed)
+            summary += "\n\nChange applied on app restart.";
+        prefSortBy.setSummary(summary);
     }
     
 

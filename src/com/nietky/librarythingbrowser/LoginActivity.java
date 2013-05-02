@@ -76,7 +76,10 @@ public class LoginActivity extends Activity {
         prefsEdit.putString("lt_password", LTPassword);
         prefsEdit.commit();
         
-        ImportTask importTask = new ImportTask(this);
-        importTask.execute();
+        Intent in = new Intent(this, BookListActivity.class);
+        in.putExtra("downloadBooks", true);
+        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(in);
+        finish();
     }
 }

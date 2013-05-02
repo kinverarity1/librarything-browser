@@ -16,7 +16,7 @@
         android:icon="@drawable/icon2"
         android:label="@string/app_name" >
         <activity
-            android:name="com.nietky.librarythingbrowser.BookListActivityNew"
+            android:name="com.nietky.librarythingbrowser.BookListActivity"
             android:label="LibraryThing Browser" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

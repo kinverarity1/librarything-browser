@@ -163,10 +163,10 @@ public class BookListActivity extends ListActivity {
         _ids = searchHandler.getIds();
     }
     
-    public void onResume () {
-        super.onResume();
-        loadList();
-    }
+//    public void onResume () {
+//        super.onResume();
+//        loadList();
+//    }
     
     public void loadList() {
         String METHOD = ":loadList(): ";
@@ -399,12 +399,12 @@ public class BookListActivity extends ListActivity {
         case R.id.menuComments:
             startActivityWithIds(new Intent(this, CommentListActivity.class));
             return true;
-        case R.id.menu_advanced_search:
-            Intent intent = new Intent(this, AdvancedSearchActivity.class);
-            intent.putExtra("ids", searchHandler.getString());
-            intent.putExtra("whereFrom", "menu");
-            startActivity(intent);
-            return true;
+//        case R.id.menu_advanced_search:
+//            Intent intent = new Intent(this, AdvancedSearchActivity.class);
+//            intent.putExtra("ids", searchHandler.getString());
+//            intent.putExtra("whereFrom", "menu");
+//            startActivity(intent);
+//            return true;
         default:
             return false;
         }
