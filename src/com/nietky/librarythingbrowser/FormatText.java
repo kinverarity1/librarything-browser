@@ -10,6 +10,8 @@ public final class FormatText {
     }
     
     public final static String fix (String s) {
+        if (s == null)
+            s = "";
         s = s.replace("[return]", "\n");
         s = s.replace("\n", "</p><p>");
         return s;

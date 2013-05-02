@@ -50,6 +50,22 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/book_detail_DDC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="DDC: " />
+        
+        <TextView
+            android:id="@+id/book_detail_LCC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="6dp"
+            android:textColor="#dddddd"
+            android:text="LCC: " />
+        
+        <TextView
             android:id="@+id/book_detail_date_entered"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
