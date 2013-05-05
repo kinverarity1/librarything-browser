@@ -645,12 +645,7 @@ public class BookListActivity extends ListActivity {
             titleTV.setText(FormatText.asHtml(cursor.getString(cursor.getColumnIndex("title"))));
             subTitleTV.setText(FormatText.asHtml(cursor.getString(cursor
                     .getColumnIndex("author2"))));
-            // if
-            // (cursor.getString(cursor.getColumnIndex("tags")).contains("unread"))
-            // {
-            // view.setBackgroundColor(Color.GRAY);
-            // } else
-            // view.setBackgroundColor(Color.BLACK);
+
         }
 
         @Override
