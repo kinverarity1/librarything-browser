@@ -1,0 +1,13 @@
+TODO
+
+1a. Test the copy-paste dialog for old Android versions.. can you select text from within the dialog?
+
+http://www.librarything.com/topic/121348#4081691
+
+1b. Add a menu to Book Details that gives an title + author field.. or a dialog that can select all the fields in one thing.
+
+2a. Rework the import code into ONE AsyncTask, like the new & discarded ImportTask
+
+2b. Adjust the db add method so it adds dates as yyyy-mm-dd
+
+3. Add a ORDER BY suffix to the queries FROM INSIDE THE SEARCHHANDLER. This should make it possible to sort the list with no performance hit, woo hoo!
