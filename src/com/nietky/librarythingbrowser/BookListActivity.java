@@ -74,6 +74,7 @@ public class BookListActivity extends ListActivity {
 
     Cursor cursor;
     ArrayList<Integer> _ids = new ArrayList<Integer>();
+    ArrayList<Integer> toDeleteIds = new ArrayList<Integer>();
     SearchHandler searchHandler;
     BookListAdapter adapter;
     
@@ -272,12 +273,20 @@ public class BookListActivity extends ListActivity {
                     dbHelper.Db.yieldIfContendedSafely();
                     dialog.setProgress(i);
                 }
+                
+                String deleteSQL = "_id IN (";
+                for (Integer deleteID : toDeleteIds) {
+                    deleteSQL += " " + deleteID + " ,";
+                }
+                deleteSQL = deleteSQL.substring(0, deleteSQL.length() - 2) + ")";
+                dbHelper.Db.delete(dbHelper.TABLE, deleteSQL, null);
+                
                 dbHelper.Db.setTransactionSuccessful();
             } finally {
                 dbHelper.Db.endTransaction();
             }
             dbHelper.close();
-
+            
             return "";
         }
 
@@ -428,6 +437,8 @@ public class BookListActivity extends ListActivity {
             e.printStackTrace();
         }
         logger.log(TAG, "Successfully read downloadedContent");
+        
+        toDeleteIds = searchHandler.getIds();
 
         ImportBooksTask task = new ImportBooksTask();
         task.execute(csvData);
@@ -561,8 +572,7 @@ public class BookListActivity extends ListActivity {
 
             logger.log(TAG + METHOD, "downloadResponseBody=" + downloadResponseBody);
             result = downloadResponseBody;
-            DbHelperNew dbHelper = new DbHelperNew(getApplicationContext());
-            dbHelper.delete();
+            
             this.publishProgress(PROGRESS_SUCCESS);
             return "";
 
