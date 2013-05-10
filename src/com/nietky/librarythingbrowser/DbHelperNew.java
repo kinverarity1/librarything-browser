@@ -120,6 +120,10 @@ public class DbHelperNew extends SQLiteOpenHelper {
     }
     
     public Cursor getIds(ArrayList<Integer> ids) {
+        return getIds(ids, "_id");
+    }
+    
+    public Cursor getIds(ArrayList<Integer> ids, String sortOrder) {
         String METHOD = ".getIds: ";
         Log.d(TAG + METHOD, "start");
         
@@ -132,11 +136,12 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 for (int i = 1; i < ids.size(); i++) {
                     sql += ", " + ids.get(i);
                 }
-                sql += ")";
+                sql = sql + ") ORDER BY " + sortOrder;
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
+                Log.d(TAG + METHOD, "sql=" + sql);
                 Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {

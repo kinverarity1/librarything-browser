@@ -16,6 +16,7 @@ public class SearchHandler {
     
     Context _context;
     ArrayList<Integer> _ids;
+    String _sortOrder = "_id";
 
     DbHelperNew dbHelper;
 
@@ -93,11 +94,15 @@ public class SearchHandler {
         String METHOD = ".getCursor(): ";
         Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         openDbHelper();
-        return dbHelper.getIds(_ids);
+        return dbHelper.getIds(_ids, getSortOrder());
     }
     
     public int size() {
         return _ids.size();
+    }
+    
+    public String getSortOrder () {
+        return sharedPref.getString("sortOrder", "_id");
     }
     
     public Integer getId(int position) {

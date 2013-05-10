@@ -274,12 +274,14 @@ public class BookListActivity extends ListActivity {
                     dialog.setProgress(i);
                 }
                 
-                String deleteSQL = "_id IN (";
-                for (Integer deleteID : toDeleteIds) {
-                    deleteSQL += " " + deleteID + " ,";
+                if (toDeleteIds.size() > 0) {
+                    String deleteSQL = "_id IN (";
+                    for (Integer deleteID : toDeleteIds) {
+                        deleteSQL += " " + deleteID + " ,";
+                    }
+                    deleteSQL = deleteSQL.substring(0, deleteSQL.length() - 2) + ")";
+                    dbHelper.Db.delete(dbHelper.TABLE, deleteSQL, null);
                 }
-                deleteSQL = deleteSQL.substring(0, deleteSQL.length() - 2) + ")";
-                dbHelper.Db.delete(dbHelper.TABLE, deleteSQL, null);
                 
                 dbHelper.Db.setTransactionSuccessful();
             } finally {
