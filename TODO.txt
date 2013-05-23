@@ -8,6 +8,8 @@ http://www.librarything.com/topic/121348#4081691
 
 2a. Rework the import code into ONE AsyncTask, like the new & discarded ImportTask
 
-2b. Adjust the db add method so it adds dates as yyyy-mm-dd
+2ai. Change the dbHelper import code to import dates as yyyy-mm-dd
 
-3. Add a ORDER BY suffix to the queries FROM INSIDE THE SEARCHHANDLER. This should make it possible to sort the list with no performance hit, woo hoo!
+2aii. Add indexing commands for each of the fields I want to sort on
+
+3. The SQL is there, in the sorting branch; it's just a bit slow, so I want to add the indexing and then ask jjmcgaffey and others to test out a beta version
