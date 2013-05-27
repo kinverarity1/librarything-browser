@@ -13,8 +13,9 @@ public class CursorTags {
         while (!cursor.isAfterLast()) {
             int tagsIndex = cursor.getColumnIndex("tags");
             String tags = cursor.getString(tagsIndex);
-            if (!tags.contains(","))
-                return tagsArray;
+            if (!(tags == null))
+                if (!tags.contains(","))
+                    return tagsArray;
             String[] tagsSA = tags.split(",");
             for (int i = 0; i < tagsSA.length; i++) {
                 String tag = tagsSA[i];
@@ -33,8 +34,9 @@ public class CursorTags {
         while (!cursor.isAfterLast()) {
             int collectionsIndex = cursor.getColumnIndex("collections");
             String collections = cursor.getString(collectionsIndex);
-            if (!collections.contains(","))
-                return collectionsArray;
+            if (!(collections == null))
+                if (!collections.contains(","))
+                    return collectionsArray;
             String[] collectionsSA = collections.split(",");
             for (int i = 0; i < collectionsSA.length; i++) {
                 String collection = collectionsSA[i];
