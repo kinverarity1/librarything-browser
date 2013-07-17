@@ -473,6 +473,8 @@ public class BookListActivity extends ListActivity {
         }
         
         protected void onProgressUpdate(Integer... progUpdate) {
+            String METHOD = ".LTLoginDownload.onProgressUpdate()";
+            
             if (progUpdate[0] == PROGRESS_LOGGED_IN){  
                dialog.setMessage("Successfully logged in. Now downloading your library.");
                if (!sharedPref.getBoolean("lt_remember_credentials", false)) {
@@ -484,6 +486,7 @@ public class BookListActivity extends ListActivity {
            } else if (progUpdate[0] == PROGRESS_SUCCESS) {
                dialog.setMessage("Successfull! Let's import your books.");
            } else if (progUpdate[0] == PROGRESS_LOGIN_FAIL) {
+               logger.log(TAG + METHOD, "Login failed.");
                dialog.setMessage("Login failed.");
                dialog.dismiss();
                Intent in = new Intent(getApplicationContext(), LoginActivity.class);
@@ -537,11 +540,13 @@ public class BookListActivity extends ListActivity {
             }
             
             logger.log(TAG + METHOD, "loginResponseBody=" + loginResponseBody);
-            if (!loginResponseBody.contains("/home/" + sharedPref.getString("lt_username", ""))) {
+            if (!loginResponseBody.contains("Home | LibraryThing")) {
+                logger.log(TAG + METHOD, "Login failed.");
                 this.publishProgress(PROGRESS_LOGIN_FAIL);
                 this.cancel(true);
                 loginPost.abort();
             } else {
+                logger.log(TAG + METHOD, "Login succeeded.");
                 this.publishProgress(PROGRESS_LOGGED_IN);
             }
             
