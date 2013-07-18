@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nietky.librarythingbrowser"
-    android:versionCode="27"
-    android:versionName="1.7.4" >
+    android:versionCode="28"
+    android:versionName="1.7.5" >
 
     <uses-sdk
         android:minSdkVersion="5"
