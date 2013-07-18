@@ -2,6 +2,7 @@ package com.nietky.librarythingbrowser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -289,6 +290,44 @@ public class SearchHandler {
             }
             currentCursor.moveToNext();
         }
+    }
+    
+    public ArrayList<String> getCommaSeparatedItemsFromColumn(String columnName) {
+        String METHOD = ".getTags()";
+        HashSet<String> globalItems = new HashSet<String>();
+        openDbHelper();
+        Cursor cursor = dbHelper.getColumn(_ids, columnName);
+        logger.log(TAG + METHOD, "cursor.getCount()=" + cursor.getCount());
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String itemsStr = cursor.getString(0);
+//            logger.log(TAG + METHOD, "cursor.position=" + cursor.getPosition() + " tags=" + itemsStr);
+            if (itemsStr.contains(",")) {
+                String[] items = itemsStr.split(",");
+                for (int i = 0; i < items.length; i++) {
+                    globalItems.add(items[i]);
+                }
+            }
+            cursor.moveToNext();
+        }
+        close();
+        return new ArrayList<String>(globalItems); 
+    }
+    
+    public ArrayList<String> getUniqueItemsFromColumn(String columnName) {
+        String METHOD = ".getTags()";
+        HashSet<String> globalItems = new HashSet<String>();
+        openDbHelper();
+        Cursor cursor = dbHelper.getColumn(_ids, columnName);
+        logger.log(TAG + METHOD, "cursor.getCount()=" + cursor.getCount());
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String itemsStr = cursor.getString(0);
+            globalItems.add(itemsStr);
+            cursor.moveToNext();
+        }
+        close();
+        return new ArrayList<String>(globalItems); 
     }
     
     

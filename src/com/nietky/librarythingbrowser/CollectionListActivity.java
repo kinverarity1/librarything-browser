@@ -35,8 +35,13 @@ public class CollectionListActivity extends Activity {
         Intent intent = getIntent();
         searchHandler = new SearchHandler(this);
         searchHandler.setIds(intent.getStringExtra("ids"));
-        collections = CursorTags.getCollections(searchHandler.getCursor());
+        collections = searchHandler.getCommaSeparatedItemsFromColumn("collections");
         Collections.sort(collections, String.CASE_INSENSITIVE_ORDER);
+        String collectionsString = "";
+        for (String collection : collections) {
+            collectionsString += ',' + collection;
+        }
+        logger.log(TAG + METHOD, "collections=" + collectionsString);
         SectionIndexingArrayAdapter<String> adapter = new SectionIndexingArrayAdapter<String>(this, android.R.layout.simple_list_item_1, collections);
         
         listView.setAdapter(adapter);

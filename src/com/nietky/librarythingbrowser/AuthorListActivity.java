@@ -35,10 +35,8 @@ public class AuthorListActivity extends Activity {
         Intent intent = getIntent();
         searchHandler = new SearchHandler(this);
         searchHandler.setIds(intent.getStringExtra("ids"));
-        authors = CursorTags.getAuthors1(searchHandler.getCursor());
+        authors = searchHandler.getUniqueItemsFromColumn("author1");
         Collections.sort(authors, String.CASE_INSENSITIVE_ORDER);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, authors);
         SectionIndexingArrayAdapter<String> adapter = new SectionIndexingArrayAdapter(this, android.R.layout.simple_list_item_1, authors);
         listView.setAdapter(adapter);
         setTitle(getString(R.string.title_activity_author_list) + " (" + authors.size() + "):");
