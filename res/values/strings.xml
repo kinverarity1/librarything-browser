@@ -82,28 +82,22 @@
     <string name="debug_log">None</string>
     <string name="title_activity_debug_log">View log</string>
     <string name="prefs_ui_debug_log_summary">View or send log to developer</string>
-<string-array name="sort_by_raw">
-        <item>date_entered_r</item>
+	<string-array name="sort_by_raw">
         <item>date_entered</item>
-        <item>date_ended_r</item>
         <item>date_ended</item>
         <item>title</item>
         <item>author1</item>
         <item>author2</item>
-        <item>date_started_r</item>
         <item>date_started</item>
         <item>DDC</item>
         <item>LCC</item>
     </string-array>
     <string-array name="sort_by_readable">
-        <item>Date entered (recent first)</item>
         <item>Date entered (oldest first)</item>
-        <item>Date finished (recent first)</item>
         <item>Date finished (oldest first)</item>
         <item>Title</item>
         <item>Author (last name)</item>
         <item>Author (first name)</item>
-        <item>Date started (recent first)</item>
         <item>Date started (oldest first)</item>
         <item>Dewey Decimal</item>
         <item>Library of Congress</item>

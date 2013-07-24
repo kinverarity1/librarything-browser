@@ -71,6 +71,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 + ", comments TEXT" + ", comments_private TEXT"
                 + ", copies TEXT" + ", encoding TEXT" + ")";
         Log.d(TAG, "onCreate, running SQL: " + CREATE_CONTACTS_TABLE);
+        db.execSQL("CREATE INDEX books_idx_title ON books(title)");
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
