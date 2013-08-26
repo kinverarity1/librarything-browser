@@ -128,6 +128,10 @@ public class DbHelperNew extends SQLiteOpenHelper {
         String METHOD = ".getIds: ";
         Log.d(TAG + METHOD, "start");
         
+        String order = "ASC";
+        if (sortOrder.contains("date")) {
+            order = "DESC";
+        }
         if (ids.size() == 0) {
             return Db.rawQuery("SELECT * FROM " + TABLE + " WHERE _id == -1", null);
         } else { 
@@ -137,7 +141,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 for (int i = 1; i < ids.size(); i++) {
                     sql += ", " + ids.get(i);
                 }
-                sql = sql + ") ORDER BY " + sortOrder;
+                sql = sql + ") ORDER BY " + sortOrder + " " + order;
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();

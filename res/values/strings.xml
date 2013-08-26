@@ -83,22 +83,24 @@
     <string name="title_activity_debug_log">View log</string>
     <string name="prefs_ui_debug_log_summary">View or send log to developer</string>
 	<string-array name="sort_by_raw">
-        <item>date_entered</item>
-        <item>date_ended</item>
+	    <item>_id</item>
         <item>title</item>
         <item>author1</item>
         <item>author2</item>
         <item>date_started</item>
+        <item>date_entered</item>
+        <item>date_ended</item>
         <item>DDC</item>
         <item>LCC</item>
     </string-array>
     <string-array name="sort_by_readable">
-        <item>Date entered (oldest first)</item>
-        <item>Date finished (oldest first)</item>
+        <item>Unsorted (Default)</item>
         <item>Title</item>
-        <item>Author (last name)</item>
-        <item>Author (first name)</item>
-        <item>Date started (oldest first)</item>
+        <item>Author\'s surname</item>
+        <item>Author\'s first name</item>
+        <item>Date started</item>
+        <item>Date entered</item>
+        <item>Date finished</item>
         <item>Dewey Decimal</item>
         <item>Library of Congress</item>
     </string-array>
