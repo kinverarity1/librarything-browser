@@ -81,6 +81,8 @@ public class BookListActivity extends ListActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor prefsEdit;
     
+    String currentSortOrder;
+    
     HttpContext localContext;
 
     @Override
@@ -92,6 +94,8 @@ public class BookListActivity extends ListActivity {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
         logger = new LogHandler(sharedPref);
         logger.log(TAG + METHOD, "Start");
+        
+        currentSortOrder = sharedPref.getString("sortOrder", "_id");
         
         CookieStore cookieStore = new BasicCookieStore();
         localContext = new BasicHttpContext();
@@ -146,6 +150,14 @@ public class BookListActivity extends ListActivity {
     public void onPause () {
         super.onPause();
         _ids = searchHandler.getIds();
+    }
+    
+    public void onResume () {
+        super.onResume();
+        if (!(currentSortOrder == sharedPref.getString("sortOrder", "_id"))) {
+            startActivity(new Intent(this, BookListActivity.class));
+            finish();
+        }
     }
     
     public void loadList() {
