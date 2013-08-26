@@ -114,7 +114,7 @@ public class SearchHandler {
         String METHOD = ".getColumnArray(columnName=" + columnName + ")";
         ArrayList<String> column = new ArrayList<String>();
         openDbHelper();
-        Cursor cursor = dbHelper.getColumn(_ids, columnName);
+        Cursor cursor = dbHelper.getColumn(_ids, columnName, getSortOrder());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             column.add(cursor.getString(0));

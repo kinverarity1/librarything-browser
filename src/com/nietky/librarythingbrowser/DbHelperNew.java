@@ -71,6 +71,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 + ", comments TEXT" + ", comments_private TEXT"
                 + ", copies TEXT" + ", encoding TEXT" + ")";
         Log.d(TAG, "onCreate, running SQL: " + CREATE_CONTACTS_TABLE);
+        db.execSQL("CREATE INDEX books_idx_title ON books(title)");
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -127,6 +128,10 @@ public class DbHelperNew extends SQLiteOpenHelper {
         String METHOD = ".getIds: ";
         Log.d(TAG + METHOD, "start");
         
+        String order = "ASC";
+        if (sortOrder.contains("date")) {
+            order = "DESC";
+        }
         if (ids.size() == 0) {
             return Db.rawQuery("SELECT * FROM " + TABLE + " WHERE _id == -1", null);
         } else { 
@@ -136,7 +141,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 for (int i = 1; i < ids.size(); i++) {
                     sql += ", " + ids.get(i);
                 }
-                sql = sql + ") ORDER BY " + sortOrder;
+                sql = sql + ") ORDER BY " + sortOrder + " " + order;
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
@@ -152,6 +157,10 @@ public class DbHelperNew extends SQLiteOpenHelper {
     }
     
     public Cursor getColumn(ArrayList<Integer> ids, String columnName) {
+        return getColumn(ids, columnName, "_id");
+    }
+    
+    public Cursor getColumn(ArrayList<Integer> ids, String columnName, String sortOrder) {
         String METHOD = ".getColumn(" + ids.size() + " ids, columnName=" + columnName + ")";
         if (ids.size() == 0) {
             return Db.rawQuery("SELECT " + columnName + " FROM " + TABLE + " WHERE _id == -1", null);
@@ -162,7 +171,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 for (int i = 1; i < ids.size(); i++) {
                     sql += ", " + ids.get(i);
                 }
-                sql += ")";
+                sql += ") ORDER BY " + sortOrder;
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
