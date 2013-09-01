@@ -71,8 +71,15 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 + ", comments TEXT" + ", comments_private TEXT"
                 + ", copies TEXT" + ", encoding TEXT" + ")";
         Log.d(TAG, "onCreate, running SQL: " + CREATE_CONTACTS_TABLE);
-        db.execSQL("CREATE INDEX books_idx_title ON books(title)");
         db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL("CREATE INDEX books_idx_title ON books(title)");
+        db.execSQL("CREATE INDEX books_idx_author1 ON books(author1)");
+        db.execSQL("CREATE INDEX books_idx_author2 ON books(author2)");
+        db.execSQL("CREATE INDEX books_idx_date_started ON books(date_started)");
+        db.execSQL("CREATE INDEX books_idx_date_acquired ON books(date_acquired)");
+        db.execSQL("CREATE INDEX books_idx_date_ended ON books(date_ended)");
+        db.execSQL("CREATE INDEX books_idx_DDC ON books(DDC)");
+        db.execSQL("CREATE INDEX books_idx_LCC ON books(LCC)");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
