@@ -52,7 +52,10 @@ import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.googlecode.jcsv.CSVStrategy;
 import com.googlecode.jcsv.reader.CSVEntryParser;
 import com.googlecode.jcsv.reader.CSVReader;
@@ -404,6 +407,10 @@ public class BookListActivity extends ListActivity {
 //            AlertDialog alert = builder.create();
 //            alert.show();
 //            return true;
+        case R.id.menuScanBarcode:
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.initiateScan();
+            return true;
         case R.id.menuImport:
             downloadBooks();
             return true;
@@ -417,6 +424,29 @@ public class BookListActivity extends ListActivity {
             return false;
         }
     }
+    
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+          // handle scan result
+            String potentialISBN = scanResult.getContents();
+            String searchString = "";
+            if (potentialISBN.length() > 10) {
+                searchString = potentialISBN.subSequence(potentialISBN.length() - 10, potentialISBN.length() - 1).toString();
+            } else {
+                searchString = potentialISBN;
+            }
+            if (searchString.length() == 10) {
+                searchString = searchString.subSequence(0, 9).toString();
+            }
+//            Toast.makeText(this, searchString, Toast.LENGTH_LONG).show();
+            Intent searchIntent = new Intent(this, BookListActivity.class);
+            searchIntent.setAction(Intent.ACTION_SEARCH);
+            searchIntent.putExtra(SearchManager.QUERY, searchString);
+            startActivity(searchIntent);
+        }
+        // else continue with any other code you need in the method
+      }
     
     public void startActivityWithIds (Intent intent) {
         intent.putExtra("ids", searchHandler.getString());
