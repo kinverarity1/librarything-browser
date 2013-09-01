@@ -305,7 +305,8 @@ public class SearchHandler {
             if (itemsStr.contains(",")) {
                 String[] items = itemsStr.split(",");
                 for (int i = 0; i < items.length; i++) {
-                    globalItems.add(items[i]);
+                    String item = items[i].trim();
+                    globalItems.add(item);
                 }
             }
             cursor.moveToNext();
