@@ -148,6 +148,13 @@ public class BookListActivity extends ListActivity {
             logger.log(TAG + METHOD, "Intent.getAction() = " + intent.getAction() + "... ignoring.");
             loadList();
         }
+        
+        if (searchHandler.size() == 1) {
+            Intent intent = new Intent(this, BookDetailActivity.class);
+            intent.putExtra("_id", searchHandler.getColumnArray("_id").get(0));
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void onPause () {
