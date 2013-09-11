@@ -33,8 +33,13 @@ public class PreferencesActivity extends PreferenceActivity  {
         prefAboutVersion.setTitle(getString(R.string.preferences_ui_version) + " " + versionNumber + "vc" + versionCode);
         
         Preference prefLastDownloaded = (Preference) findPreference("last_download");
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefLastDownloaded.setSummary(sharedPref.getString("last_download_summary", ""));
+        
+    }
+    
+    public void onResume () {
+        super.onResume();
         
         String[] sort_by_raw = getResources().getStringArray(R.array.sort_by_raw);
         String[] sort_by_readable = getResources().getStringArray(R.array.sort_by_readable);
@@ -48,20 +53,7 @@ public class PreferencesActivity extends PreferenceActivity  {
         }
         Preference prefSortOrder = (Preference) findPreference("sortOrder");
         prefSortOrder.setSummary("Currently sorted by: " + pretty_sort_order);
-        
-//        DialogPreference debugLog = (DialogPreference) findPreference("debug_dialog_pref");
-//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-//        debugLog.setDialogMessage(sharedPref.getString("debug_log", "No log."));
-//        
-//
-//        <DialogPreference
-//            android:key="debug_dialog_pref"
-//            android:dialogTitle="Log for debugging"
-//            android:dialogMessage="The log goes here"
-//            android:positiveButtonText="OK"
-//            android:negativeButtonText="Cancel" />
     }
-    
 
 }
 
