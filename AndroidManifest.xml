@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nietky.librarythingbrowser"
     android:versionCode="31"
-    android:versionName="1.8.2" >
+    android:versionName="dev" >
 
     <uses-sdk
         android:minSdkVersion="5"
