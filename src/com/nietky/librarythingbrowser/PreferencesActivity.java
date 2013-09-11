@@ -33,8 +33,21 @@ public class PreferencesActivity extends PreferenceActivity  {
         prefAboutVersion.setTitle(getString(R.string.preferences_ui_version) + " " + versionNumber + "vc" + versionCode);
         
         Preference prefLastDownloaded = (Preference) findPreference("last_download");
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefLastDownloaded.setSummary(sharedPrefs.getString("last_download_summary", ""));
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefLastDownloaded.setSummary(sharedPref.getString("last_download_summary", ""));
+        
+        String[] sort_by_raw = getResources().getStringArray(R.array.sort_by_raw);
+        String[] sort_by_readable = getResources().getStringArray(R.array.sort_by_readable);
+        String sort_order = sharedPref.getString("sortOrder", "_id");
+        String pretty_sort_order = "None";
+        for (int i = 0; i < sort_by_raw.length; i++) {
+            if (sort_by_raw[i].contentEquals(sort_order)) {
+                pretty_sort_order = sort_by_readable[i];
+                break;
+            }
+        }
+        Preference prefSortOrder = (Preference) findPreference("sortOrder");
+        prefSortOrder.setSummary("Currently sorted by: " + pretty_sort_order);
         
 //        DialogPreference debugLog = (DialogPreference) findPreference("debug_dialog_pref");
 //        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
