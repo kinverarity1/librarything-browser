@@ -88,9 +88,6 @@
         <item>title</item>
         <item>author1</item>
         <item>author2</item>
-        <item>date_started</item>
-        <item>date_entered</item>
-        <item>date_ended</item>
         <item>DDC</item>
         <item>LCC</item>
     </string-array>
@@ -99,9 +96,6 @@
         <item>Title</item>
         <item>Author\'s surname</item>
         <item>Author\'s first name</item>
-        <item>Date started</item>
-        <item>Date entered</item>
-        <item>Date finished</item>
         <item>Dewey Decimal</item>
         <item>Library of Congress</item>
     </string-array>
