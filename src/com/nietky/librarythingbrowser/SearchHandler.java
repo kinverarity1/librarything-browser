@@ -119,9 +119,14 @@ public class SearchHandler {
         ArrayList<String> column = new ArrayList<String>();
         openDbHelper();
         Cursor cursor = dbHelper.getColumn(_ids, columnName, getSortOrder());
-        for(cursor.moveToFirst(); cursor.moveToNext(); cursor.isAfterLast()) {
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
             column.add(cursor.getString(0));
+            cursor.moveToNext();
         }
+//        for (cursor.moveToFirst(); cursor.moveToNext(); cursor.isAfterLast()) {
+//            column.add(cursor.getString(0));
+//        }
         close();
         
         //Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_end");

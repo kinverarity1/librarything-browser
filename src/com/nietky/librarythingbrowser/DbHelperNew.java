@@ -10,6 +10,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class DbHelperNew extends SQLiteOpenHelper {
@@ -133,20 +134,17 @@ public class DbHelperNew extends SQLiteOpenHelper {
         String METHOD = ".getIds: ";
         logger.log(TAG + METHOD, "start");
         
-        String order = "ASC";
-        if (sortOrder.contains("date")) {
-            order = "DESC";
-        }
         if (ids.size() == 0) {
             return Db.rawQuery("SELECT * FROM " + TABLE + " WHERE _id == -1", null);
         } else { 
             try {
                 String sql = "SELECT * FROM " + TABLE + " WHERE ";
-                sql += "_id IN (" + ids.get(0);
-                for (int i = 1; i < ids.size(); i++) {
-                    sql += ", " + ids.get(i);
+                ArrayList<String> idStrings = new ArrayList<String>();
+                for (int id: ids) {
+                    idStrings.add("" + id);
                 }
-                sql = sql + ") ORDER BY " + sortOrder + " " + order;
+                sql += "_id IN (" + TextUtils.join(", ", idStrings) + ") ORDER BY " + sortOrder;
+                
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
@@ -173,13 +171,11 @@ public class DbHelperNew extends SQLiteOpenHelper {
             try {
                 //Log.i(TAG + METHOD, "performance_track start_SQL_query_String_construction");
                 String sql = "SELECT " + columnName + " FROM " + TABLE + " WHERE ";
-                StringBuilder builder = new StringBuilder();
-                for (int i: ids) {
-                    builder.append(i);
-                    builder.append(",");
+                ArrayList<String> idStrings = new ArrayList<String>();
+                for (int id: ids) {
+                    idStrings.add("" + id);
                 }
-                String text = builder.toString();
-                sql += "_id IN (" + text.substring(0, text.length() - 1) + ") ORDER BY " + sortOrder;
+                sql += "_id IN (" + TextUtils.join(", ", idStrings) + ") ORDER BY " + sortOrder;
                 //Log.i(TAG + METHOD, "performance_track start_SQL_query_execution");
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {

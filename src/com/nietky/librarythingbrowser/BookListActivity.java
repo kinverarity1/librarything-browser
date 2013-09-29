@@ -716,29 +716,29 @@ public class BookListActivity extends ListActivity {
         }
     }
 
-    public class BookListCursorAdapter extends CursorAdapter {
-        LayoutInflater inflater;
-        @SuppressWarnings("deprecation")
-        public BookListCursorAdapter(Context context, Cursor c) {
-            super(context, c);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-            TextView titleTV = (TextView) view
-                    .findViewById(R.id.book_list_item_title);
-            TextView subTitleTV = (TextView) view
-                    .findViewById(R.id.book_list_item_subtitle);
-            titleTV.setText(FormatText.asHtml(cursor.getString(cursor.getColumnIndex("title"))));
-            subTitleTV.setText(FormatText.asHtml(cursor.getString(cursor
-                    .getColumnIndex("author2"))));
-
-        }
-
-        @Override
-        public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return inflater.inflate(R.layout.book_list_item, parent, false);
-        }
-    }
+//    public class BookListCursorAdapter extends CursorAdapter {
+//        LayoutInflater inflater;
+//        @SuppressWarnings("deprecation")
+//        public BookListCursorAdapter(Context context, Cursor c) {
+//            super(context, c);
+//            inflater = LayoutInflater.from(context);
+//        }
+//
+//        @Override
+//        public void bindView(View view, Context context, Cursor cursor) {
+//            TextView titleTV = (TextView) view
+//                    .findViewById(R.id.book_list_item_title);
+//            TextView subTitleTV = (TextView) view
+//                    .findViewById(R.id.book_list_item_subtitle);
+//            titleTV.setText(FormatText.asHtml(cursor.getString(cursor.getColumnIndex("title"))));
+//            subTitleTV.setText(FormatText.asHtml(cursor.getString(cursor
+//                    .getColumnIndex("author2"))));
+//
+//        }
+//
+//        @Override
+//        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+//            return inflater.inflate(R.layout.book_list_item, parent, false);
+//        }
+//    }
 }
