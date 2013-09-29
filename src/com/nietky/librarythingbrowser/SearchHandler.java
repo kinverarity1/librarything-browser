@@ -46,7 +46,7 @@ public class SearchHandler {
     
     public void setIds () {
         String METHOD = "-setIds() [all]";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         openDbHelper();
         _ids = dbHelper.getAllIds();
         closeDbHelper();
@@ -54,11 +54,11 @@ public class SearchHandler {
     
     public void setIds (String commaSeparatedIds) {
         String METHOD = "-setIds(a String)";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
-        Log.d(TAG + METHOD, "commaSeparatedIds=" + commaSeparatedIds);
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "commaSeparatedIds=" + commaSeparatedIds);
         String[] ids = commaSeparatedIds.split(",");
         _ids = new ArrayList<Integer> ();
-        Log.d(TAG + METHOD, "ids.length=" + ids.length);
+        logger.log(TAG + METHOD, "ids.length=" + ids.length);
         if (ids.length > 0) {
             for (int i = 0; i < ids.length; i++) {
                 if (ids[i].length() > 0) {
@@ -71,19 +71,19 @@ public class SearchHandler {
     
     public void setIds(ArrayList<Integer> ids) {
         String METHOD = "-setIds(ArrayList<Integer> ids.size()=" + ids.size() + ")";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         _ids = ids;
     }
     
     public ArrayList<Integer> getIds() {
         String METHOD = ".getIds()";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         return _ids;
     }
     
     public String getString () {
         String METHOD = ".getString()";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         String s = "";
         for (int i = 0; i < _ids.size(); i++) {
             s += String.valueOf(_ids.get(i)) + ",";
@@ -93,7 +93,7 @@ public class SearchHandler {
     
     public Cursor getCursor() {
         String METHOD = ".getCursor(): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         openDbHelper();
         return dbHelper.getIds(_ids, getSortOrder());
     }
@@ -126,7 +126,7 @@ public class SearchHandler {
     
     public HashMap<String, String> getFields(Integer _id) {
         String METHOD = ".getFields(_id=" + _id + "): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         
         String fieldname;
         String[] fieldnames = { "_id", "book_id", "title", "author1",
@@ -170,7 +170,7 @@ public class SearchHandler {
 
     public void restrictByQuery(String query) {
         String METHOD = "-restrictByQuery(" + query + "): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -194,9 +194,9 @@ public class SearchHandler {
     
     public void restrictByTag(String tag) {
         String METHOD = "-restrictByTag(" + tag + "): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         tag = tag.trim();
-        Log.d(TAG + METHOD, "trimmed tag query to |" + tag + "|");
+        logger.log(TAG + METHOD, "trimmed tag query to |" + tag + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -218,27 +218,27 @@ public class SearchHandler {
     
     public void restrictByCollection(String collection) {
         String METHOD = "-restrictByCollection(" + collection + "):";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         collection = collection.trim();
-        Log.d(TAG + METHOD, "trimmed collection query to |" + collection + "|");
+        logger.log(TAG + METHOD, "trimmed collection query to |" + collection + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
             String rawCollections = currentCursor.getString(currentCursor.getColumnIndex("collections"));
-            Log.d(TAG + METHOD, "rawCollections=" + rawCollections);
+            logger.log(TAG + METHOD, "rawCollections=" + rawCollections);
             String [] collections = rawCollections.split(",");
             boolean collectionMatch = false;
             for (int i = 0; i < collections.length; i++) {
                 if (collection.equals(collections[i].trim())) {
                     collectionMatch = true;
-                    Log.d(TAG + METHOD, "match found for collections[" + i + "]=" + collections[i].trim());
+                    logger.log(TAG + METHOD, "match found for collections[" + i + "]=" + collections[i].trim());
                     break;
                 }
             }
             if (!collectionMatch) {
-                Log.d(TAG + METHOD, "about to remove (_ids.size()=" + _ids.size() + ")");
+                logger.log(TAG + METHOD, "about to remove (_ids.size()=" + _ids.size() + ")");
                 _ids.remove((Object) currentCursor.getInt(currentCursor.getColumnIndex("_id")));
-                Log.d(TAG + METHOD, "removed (_ids.size()=" + _ids.size() + ")");
+                logger.log(TAG + METHOD, "removed (_ids.size()=" + _ids.size() + ")");
             }
             currentCursor.moveToNext();
         }
@@ -246,9 +246,9 @@ public class SearchHandler {
     
     public void restrictByAuthor (String author) {
         String METHOD = "-restrictByAuthor(" + author + "):";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         author = author.trim();
-        Log.d(TAG + METHOD, "trimmed author query to |" + author + "|");
+        logger.log(TAG + METHOD, "trimmed author query to |" + author + "|");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -256,7 +256,7 @@ public class SearchHandler {
             String author2 = currentCursor.getString(currentCursor.getColumnIndex("author2"));
             String author_other = currentCursor.getString(currentCursor.getColumnIndex("author_other"));
             String authors = author1 + " " + author2 + " " + author_other;
-//            Log.d(TAG + METHOD, "authors=" + authors);
+//            logger.log(TAG + METHOD, "authors=" + authors);
             if (!authors.contains(author)) {
                 _ids.remove((Object) currentCursor.getInt(currentCursor.getColumnIndex("_id")));
             }
@@ -266,7 +266,7 @@ public class SearchHandler {
     
     public void restrictByReview () {
         String METHOD = "-restrictByReview(): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {
@@ -279,7 +279,7 @@ public class SearchHandler {
     }
     public void restrictByComments () {
         String METHOD = "-restrictByComments(): ";
-        Log.d(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         Cursor currentCursor = getCursor();
         currentCursor.moveToFirst();
         while (!currentCursor.isAfterLast()) {

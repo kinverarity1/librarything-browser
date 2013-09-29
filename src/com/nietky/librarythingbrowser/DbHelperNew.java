@@ -40,8 +40,6 @@ public class DbHelperNew extends SQLiteOpenHelper {
     public DbHelperNew(Context contextLocal) {      
         super(contextLocal, DATABASE_NAME, null, DATABASE_VERSION);
         String METHOD = ".constructor: ";
-        Log.d(TAG + METHOD, "start");
-        
         sharedPref = PreferenceManager.getDefaultSharedPreferences(contextLocal.getApplicationContext());
         logger = new LogHandler(sharedPref);
         logger.log(TAG + METHOD, "Start");
@@ -51,12 +49,12 @@ public class DbHelperNew extends SQLiteOpenHelper {
         context = contextLocal;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(contextLocal
                 .getApplicationContext());
-        Log.d(TAG, "Helper ready, looking at " + DATABASE_PATH);
+        logger.log(TAG, "Helper ready, looking at " + DATABASE_PATH);
     }
 
     public void onCreate(SQLiteDatabase db) {
         String METHOD = ".onCreate: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE + "("
                 + "_id INTEGER PRIMARY KEY" + ", book_id TEXT" + ", title TEXT"
@@ -70,7 +68,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 + ", tags TEXT" + ", review TEXT" + ", summary TEXT"
                 + ", comments TEXT" + ", comments_private TEXT"
                 + ", copies TEXT" + ", encoding TEXT" + ")";
-        Log.d(TAG, "onCreate, running SQL: " + CREATE_CONTACTS_TABLE);
+        logger.log(TAG, "onCreate, running SQL: " + CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
         db.execSQL("CREATE INDEX books_idx_title ON books(title)");
         db.execSQL("CREATE INDEX books_idx_author1 ON books(author1)");
@@ -84,7 +82,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String METHOD = ".onUpgrade: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         db.execSQL("DROP TABLE IF EXISTS " + TABLE);
         onCreate(db);
@@ -93,7 +91,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
     @SuppressWarnings("unused")
     public boolean open() throws SQLException {
         String METHOD = ".open: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         String path = DATABASE_PATH + DATABASE_NAME;
         Db = this.getWritableDatabase();
@@ -102,9 +100,9 @@ public class DbHelperNew extends SQLiteOpenHelper {
 
     public void addRow(String[] values) {
         String METHOD = ".addRow: ";
-//        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
-//        Log.d(TAG, KEYS.length + " key labels; " + values.length + " values.");
+        logger.log(TAG, KEYS.length + " key labels; " + values.length + " values.");
         ContentValues cvalues = new ContentValues();
         for (int i = 0; i < values.length; i++)
             cvalues.put(KEYS[i], values[i]);
@@ -113,14 +111,14 @@ public class DbHelperNew extends SQLiteOpenHelper {
 
     public void close() {
         String METHOD = ".close: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         Db.close();
     }
 
     public void delete() {
         String METHOD = ".delete: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         Db = this.getWritableDatabase();
         Db.execSQL("DROP TABLE IF EXISTS " + TABLE);
@@ -133,7 +131,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
     
     public Cursor getIds(ArrayList<Integer> ids, String sortOrder) {
         String METHOD = ".getIds: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         String order = "ASC";
         if (sortOrder.contains("date")) {
@@ -153,11 +151,11 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
-                Log.d(TAG + METHOD, "sql=" + sql);
-                Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
+                logger.log(TAG + METHOD, "sql=" + sql);
+                logger.log(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {
-                Log.e(TAG, "getTestData >>" + mSQLException.toString());
+                logger.log(TAG, "getTestData >>" + mSQLException.toString());
                 throw mSQLException;
             }
         }
@@ -183,7 +181,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
-                Log.d(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
+                logger.log(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
                 return cursor;
             } catch (SQLException mSQLException) {
                 Log.e(TAG, "getTestData >>" + mSQLException.toString());
@@ -194,7 +192,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
     
     public ArrayList<Integer> getAllIds() {
         String METHOD = ".getAllIds: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         String sql = "SELECT _id FROM " + TABLE;
         Cursor cursor = Db.rawQuery(sql, null);
@@ -207,13 +205,13 @@ public class DbHelperNew extends SQLiteOpenHelper {
             _ids.add(cursor.getInt(cursor.getColumnIndex("_id")));
             cursor.moveToNext();
         }
-        Log.d(TAG + METHOD, "returning " + _ids.size() + " ids");
+        logger.log(TAG + METHOD, "returning " + _ids.size() + " ids");
         return _ids;
     }
     
     public Cursor searchTag(String search, String orderByColumn) {
         String METHOD = ".searchTag: ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         try {
             String sql = "SELECT * FROM " + TABLE + " WHERE ";
@@ -232,7 +230,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
     
     public Cursor getRow(String id) {
         String METHOD = ".getRow(id=" + id + "): ";
-        Log.d(TAG + METHOD, "start");
+        logger.log(TAG + METHOD, "start");
         
         String sql = "SELECT * FROM " + TABLE + " WHERE _id='" + id + "'";
         Cursor cursor = Db.rawQuery(sql, null);
