@@ -90,11 +90,11 @@ public class SearchHandler {
         String METHOD = ".getCursor(): ";
         logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
         
-        Log.i(TAG + METHOD, "performance_track getCursor_tag1");
+        //Log.i(TAG + METHOD, "performance_track getCursor_tag1");
         
         openDbHelper();
         
-        Log.i(TAG + METHOD, "performance_track getCursor_tag2");
+        //Log.i(TAG + METHOD, "performance_track getCursor_tag2");
         
         return dbHelper.getIds(_ids, getSortOrder());
     }
@@ -114,7 +114,7 @@ public class SearchHandler {
     public ArrayList<String> getColumnArray(String columnName) {
         String METHOD = ".getColumnArray(columnName=" + columnName + ")";
         
-        Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_start");
+        //Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_start");
         
         ArrayList<String> column = new ArrayList<String>();
         openDbHelper();
@@ -124,7 +124,7 @@ public class SearchHandler {
         }
         close();
         
-        Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_end");
+        //Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_end");
         
         return column;
     }

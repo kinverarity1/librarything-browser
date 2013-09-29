@@ -171,7 +171,7 @@ public class DbHelperNew extends SQLiteOpenHelper {
             return Db.rawQuery("SELECT " + columnName + " FROM " + TABLE + " WHERE _id == -1", null);
         } else { 
             try {
-                Log.i(TAG + METHOD, "performance_track start_SQL_query_String_construction");
+                //Log.i(TAG + METHOD, "performance_track start_SQL_query_String_construction");
                 String sql = "SELECT " + columnName + " FROM " + TABLE + " WHERE ";
                 StringBuilder builder = new StringBuilder();
                 for (int i: ids) {
@@ -180,13 +180,13 @@ public class DbHelperNew extends SQLiteOpenHelper {
                 }
                 String text = builder.toString();
                 sql += "_id IN (" + text.substring(0, text.length() - 1) + ") ORDER BY " + sortOrder;
-                Log.i(TAG + METHOD, "performance_track start_SQL_query_execution");
+                //Log.i(TAG + METHOD, "performance_track start_SQL_query_execution");
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
                 logger.log(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
-                Log.i(TAG + METHOD, "performance_track start_SQL_returning_cursor");
+                //Log.i(TAG + METHOD, "performance_track start_SQL_returning_cursor");
                 return cursor;
             } catch (SQLException mSQLException) {
                 Log.e(TAG, "getTestData >>" + mSQLException.toString());
