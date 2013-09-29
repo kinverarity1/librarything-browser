@@ -91,7 +91,7 @@ public class BookListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String METHOD = ".onCreate()";
-        Log.i(TAG + METHOD, " start loading at " + System.currentTimeMillis());
+        Log.i(TAG + METHOD, "performance_track onCreate_start ");
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
@@ -108,6 +108,8 @@ public class BookListActivity extends ListActivity {
         searchHandler = new SearchHandler(this);
         searchHandler.setIds();
         setTitle(getString(R.string.topbar_allbooks));
+        
+        Log.i(TAG + METHOD, "performance_track prior_to_intent_parsing ");
         
         intent = getIntent();
         String action = intent.getAction();
@@ -149,6 +151,7 @@ public class BookListActivity extends ListActivity {
             logger.log(TAG + METHOD, "Intent.getAction() = " + intent.getAction() + "... ignoring.");
             loadList();
         }
+        Log.i(TAG + METHOD, "performance_track intent_parse_finish");
         
         if (searchHandler.size() == 1) {
             Intent intent = new Intent(this, BookDetailActivity.class);
@@ -156,6 +159,7 @@ public class BookListActivity extends ListActivity {
             startActivity(intent);
             finish();
         }
+        Log.i(TAG + METHOD, "performance_track onCreate_finish");
     }
 
     public void onPause () {
@@ -166,19 +170,23 @@ public class BookListActivity extends ListActivity {
     public void onResume () {
         super.onResume();
         String METHOD = ".onResume()"; 
-        Log.i(TAG + METHOD, "finish loading at " + System.currentTimeMillis());
         
         if (!(currentSortOrder == sharedPref.getString("sortOrder", "_id"))) {
             startActivity(new Intent(this, BookListActivity.class));
             finish();
         }
+        
+        Log.i(TAG + METHOD, "performance_track onResume_finish");
     }
     
     public void loadList() {
         String METHOD = ":loadList(): ";
         logger.log(TAG + METHOD, "start");
+        Log.i(TAG + METHOD, "performance_track loadList_start");
         
         cursor = searchHandler.getCursor();
+        
+        Log.i(TAG + METHOD, "performance_track loadList_after_getcursor");
         
         if (cursor.getCount() == 0) {
             SearchHandler testSearchHandler = new SearchHandler(this);
@@ -191,10 +199,17 @@ public class BookListActivity extends ListActivity {
             }
         }
         
-//        adapter = new BookListCursorAdapter(this, cursor);
+        Log.i(TAG + METHOD, "performance_track loadList_create_adapter_start");
+        
         adapter = new BookListAdapter(this, new String[] {"title", "author2"});
+        
+        Log.i(TAG + METHOD, "performance_track loadList_created_adapter");
+        
         getListView().setFastScrollEnabled(true);
+        
         setListAdapter(adapter);
+        
+        Log.i(TAG + METHOD, "performance_track loadList_finish");
     }
     
     public void downloadBooks() {
@@ -665,15 +680,18 @@ public class BookListActivity extends ListActivity {
         private ArrayList<ArrayList<String>> columns = new ArrayList<ArrayList<String>>();
         
         public BookListAdapter (Context context, String[] columnNames) {
+            String METHOD = ".BookListAdapter constructor()";
             this.context = context;
             inflater = LayoutInflater.from(context);
+            Log.i(TAG + METHOD, "performance_track BookListAdapter_tag1");
+            
             for (int i = 0; i < columnNames.length; i++) {
                 columns.add(searchHandler.getColumnArray(columnNames[i]));
             }
+            Log.i(TAG + METHOD, "performance_track BookListAdapter_tag2");
         }
         
         public int getCount() {
-            // TODO Auto-generated method stub
             return columns.get(0).size();
         }
 

@@ -171,17 +171,22 @@ public class DbHelperNew extends SQLiteOpenHelper {
             return Db.rawQuery("SELECT " + columnName + " FROM " + TABLE + " WHERE _id == -1", null);
         } else { 
             try {
+                Log.i(TAG + METHOD, "performance_track start_SQL_query_String_construction");
                 String sql = "SELECT " + columnName + " FROM " + TABLE + " WHERE ";
-                sql += "_id IN (" + ids.get(0);
-                for (int i = 1; i < ids.size(); i++) {
-                    sql += ", " + ids.get(i);
+                StringBuilder builder = new StringBuilder();
+                for (int i: ids) {
+                    builder.append(i);
+                    builder.append(",");
                 }
-                sql += ") ORDER BY " + sortOrder;
+                String text = builder.toString();
+                sql += "_id IN (" + text.substring(0, text.length() - 1) + ") ORDER BY " + sortOrder;
+                Log.i(TAG + METHOD, "performance_track start_SQL_query_execution");
                 Cursor cursor = Db.rawQuery(sql, null);
                 if (cursor != null) {
                     cursor.moveToFirst();
                 }
                 logger.log(TAG + METHOD, "returning a Cursor with " + cursor.getCount() + " from a request for " + ids.size() + " ids");
+                Log.i(TAG + METHOD, "performance_track start_SQL_returning_cursor");
                 return cursor;
             } catch (SQLException mSQLException) {
                 Log.e(TAG, "getTestData >>" + mSQLException.toString());

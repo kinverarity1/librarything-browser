@@ -23,15 +23,10 @@ public class SearchHandler {
 
     public SearchHandler(Context context) {
         String METHOD = ".constructor(Context): ";
-        
+        _context = context;
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         logger = new LogHandler(sharedPref);
         logger.log(TAG + METHOD, "Start");
-        
-        _context = context;
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(_context.getApplicationContext());
-        logger = new LogHandler(sharedPref);
-        
         _ids = new ArrayList<Integer> ();
     }
     
@@ -94,7 +89,13 @@ public class SearchHandler {
     public Cursor getCursor() {
         String METHOD = ".getCursor(): ";
         logger.log(TAG + METHOD, "start (searchHandler._ids.size()=" + _ids.size() + ")");
+        
+        Log.i(TAG + METHOD, "performance_track getCursor_tag1");
+        
         openDbHelper();
+        
+        Log.i(TAG + METHOD, "performance_track getCursor_tag2");
+        
         return dbHelper.getIds(_ids, getSortOrder());
     }
     
@@ -112,15 +113,19 @@ public class SearchHandler {
     
     public ArrayList<String> getColumnArray(String columnName) {
         String METHOD = ".getColumnArray(columnName=" + columnName + ")";
+        
+        Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_start");
+        
         ArrayList<String> column = new ArrayList<String>();
         openDbHelper();
         Cursor cursor = dbHelper.getColumn(_ids, columnName, getSortOrder());
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+        for(cursor.moveToFirst(); cursor.moveToNext(); cursor.isAfterLast()) {
             column.add(cursor.getString(0));
-            cursor.moveToNext();
         }
         close();
+        
+        Log.i(TAG + METHOD, "performance_track getColumnArray_" + columnName + "_end");
+        
         return column;
     }
     
