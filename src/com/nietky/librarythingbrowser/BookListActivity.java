@@ -43,6 +43,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +53,6 @@ import android.widget.BaseAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -91,6 +91,7 @@ public class BookListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         String METHOD = ".onCreate()";
+        Log.i(TAG + METHOD, " start loading at " + System.currentTimeMillis());
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
@@ -164,6 +165,9 @@ public class BookListActivity extends ListActivity {
     
     public void onResume () {
         super.onResume();
+        String METHOD = ".onResume()"; 
+        Log.i(TAG + METHOD, "finish loading at " + System.currentTimeMillis());
+        
         if (!(currentSortOrder == sharedPref.getString("sortOrder", "_id"))) {
             startActivity(new Intent(this, BookListActivity.class));
             finish();
