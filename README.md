@@ -1,6 +1,6 @@
 # LibraryThing Browser
 
-This is a simple offline browser for LibraryThing users. You can download your public or private library and use it offline to search and browse your books, comments, and reviews, but you can't edit the data. You can also search for books in your library with a barcode scanner.
+This is a simple offline browser for LibraryThing users with Android devices. You can download your public or private library and use it offline to search and browse your books, comments, and reviews, but you can't edit the data. You can also search for books in your library with a barcode scanner.
  
 I am not affiliated with LibraryThing at all, just a regular user tinkering in my spare time.
 
