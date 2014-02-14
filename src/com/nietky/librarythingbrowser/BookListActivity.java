@@ -568,7 +568,7 @@ public class BookListActivity extends ListActivity {
             
             HttpClient client = new DefaultHttpClient();
             HttpPost loginPost = new HttpPost(
-                    "http://www.librarything.com/enter/start");
+                    "https://www.librarything.com/enter/start");
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
             nameValuePairs

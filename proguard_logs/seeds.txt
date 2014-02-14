@@ -1,0 +1,249 @@
+android.support.v4.app.BackStackState
+android.support.v4.app.BackStackState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.Fragment$SavedState
+android.support.v4.app.Fragment$SavedState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentManagerState
+android.support.v4.app.FragmentManagerState: android.os.Parcelable$Creator CREATOR
+android.support.v4.app.FragmentState
+android.support.v4.app.FragmentState: android.os.Parcelable$Creator CREATOR
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status[] values()
+android.support.v4.content.ModernAsyncTask$Status: android.support.v4.content.ModernAsyncTask$Status valueOf(java.lang.String)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColor(int)
+android.support.v4.view.PagerTabStrip: void setTabIndicatorColorResource(int)
+android.support.v4.view.PagerTabStrip: int getTabIndicatorColor()
+android.support.v4.view.PagerTabStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.PagerTabStrip: void setBackgroundColor(int)
+android.support.v4.view.PagerTabStrip: void setBackgroundResource(int)
+android.support.v4.view.PagerTabStrip: void setDrawFullUnderline(boolean)
+android.support.v4.view.PagerTabStrip: boolean getDrawFullUnderline()
+android.support.v4.view.PagerTabStrip: int getMinHeight()
+android.support.v4.view.PagerTitleStrip: void setSingleLineAllCaps(android.widget.TextView)
+android.support.v4.view.PagerTitleStrip: void setTextSpacing(int)
+android.support.v4.view.PagerTitleStrip: int getTextSpacing()
+android.support.v4.view.PagerTitleStrip: void setNonPrimaryAlpha(float)
+android.support.v4.view.PagerTitleStrip: void setTextColor(int)
+android.support.v4.view.PagerTitleStrip: void setGravity(int)
+android.support.v4.view.PagerTitleStrip: int getMinHeight()
+android.support.v4.view.ViewPager: void setScrollState(int)
+android.support.v4.view.ViewPager: void setAdapter(android.support.v4.view.PagerAdapter)
+android.support.v4.view.ViewPager: android.support.v4.view.PagerAdapter getAdapter()
+android.support.v4.view.ViewPager: void setOnAdapterChangeListener(android.support.v4.view.ViewPager$OnAdapterChangeListener)
+android.support.v4.view.ViewPager: void setCurrentItem(int)
+android.support.v4.view.ViewPager: int getCurrentItem()
+android.support.v4.view.ViewPager: void setOnPageChangeListener(android.support.v4.view.ViewPager$OnPageChangeListener)
+android.support.v4.view.ViewPager: int getOffscreenPageLimit()
+android.support.v4.view.ViewPager: void setOffscreenPageLimit(int)
+android.support.v4.view.ViewPager: void setPageMargin(int)
+android.support.v4.view.ViewPager: int getPageMargin()
+android.support.v4.view.ViewPager: void setPageMarginDrawable(android.graphics.drawable.Drawable)
+android.support.v4.view.ViewPager: void setPageMarginDrawable(int)
+android.support.v4.view.ViewPager: void setScrollingCacheEnabled(boolean)
+android.support.v4.view.ViewPager$SavedState
+android.support.v4.view.ViewPager$SavedState: android.os.Parcelable$Creator CREATOR
+com.googlecode.jcsv.reader.internal.CSVTokenizerImpl$State: com.googlecode.jcsv.reader.internal.CSVTokenizerImpl$State[] values()
+com.googlecode.jcsv.reader.internal.CSVTokenizerImpl$State: com.googlecode.jcsv.reader.internal.CSVTokenizerImpl$State valueOf(java.lang.String)
+com.nietky.librarythingbrowser.AuthorListActivity
+com.nietky.librarythingbrowser.AuthorListActivity: AuthorListActivity()
+com.nietky.librarythingbrowser.BookDetailActivity
+com.nietky.librarythingbrowser.BookDetailActivity: BookDetailActivity()
+com.nietky.librarythingbrowser.BookListActivity
+com.nietky.librarythingbrowser.BookListActivity: BookListActivity()
+com.nietky.librarythingbrowser.CollectionListActivity
+com.nietky.librarythingbrowser.CollectionListActivity: CollectionListActivity()
+com.nietky.librarythingbrowser.CommentListActivity
+com.nietky.librarythingbrowser.CommentListActivity: CommentListActivity()
+com.nietky.librarythingbrowser.DebugLog
+com.nietky.librarythingbrowser.DebugLog: DebugLog()
+com.nietky.librarythingbrowser.DebugLog: void showLog(android.view.View)
+com.nietky.librarythingbrowser.LoginActivity
+com.nietky.librarythingbrowser.LoginActivity: LoginActivity()
+com.nietky.librarythingbrowser.LoginActivity: void downloadLibrary(android.view.View)
+com.nietky.librarythingbrowser.PreferencesActivity
+com.nietky.librarythingbrowser.PreferencesActivity: PreferencesActivity()
+com.nietky.librarythingbrowser.R$array: int sort_by_raw
+com.nietky.librarythingbrowser.R$array: int sort_by_readable
+com.nietky.librarythingbrowser.R$dimen: int activity_horizontal_margin
+com.nietky.librarythingbrowser.R$dimen: int activity_vertical_margin
+com.nietky.librarythingbrowser.R$drawable: int ic_launcher
+com.nietky.librarythingbrowser.R$drawable: int ic_lock_lock
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_authors
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_close_clear_cancel
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_collections
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_delete
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_link
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_preferences
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_refresh
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_search
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_settings_holo_light
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_show_all
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_sort_alphabetically
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_sort_by_size
+com.nietky.librarythingbrowser.R$drawable: int ic_menu_tag
+com.nietky.librarythingbrowser.R$drawable: int icon2
+com.nietky.librarythingbrowser.R$drawable: int rounded_edges
+com.nietky.librarythingbrowser.R$drawable: int rounded_edges_collection
+com.nietky.librarythingbrowser.R$drawable: int rounded_edges_tag
+com.nietky.librarythingbrowser.R$id: int action_settings
+com.nietky.librarythingbrowser.R$id: int authorListView
+com.nietky.librarythingbrowser.R$id: int book_detail_DDC
+com.nietky.librarythingbrowser.R$id: int book_detail_LCC
+com.nietky.librarythingbrowser.R$id: int book_detail_author
+com.nietky.librarythingbrowser.R$id: int book_detail_collections_container
+com.nietky.librarythingbrowser.R$id: int book_detail_comments
+com.nietky.librarythingbrowser.R$id: int book_detail_comments_private
+com.nietky.librarythingbrowser.R$id: int book_detail_date_acquired
+com.nietky.librarythingbrowser.R$id: int book_detail_date_ended
+com.nietky.librarythingbrowser.R$id: int book_detail_date_entered
+com.nietky.librarythingbrowser.R$id: int book_detail_date_started
+com.nietky.librarythingbrowser.R$id: int book_detail_publication
+com.nietky.librarythingbrowser.R$id: int book_detail_rating_bar
+com.nietky.librarythingbrowser.R$id: int book_detail_review
+com.nietky.librarythingbrowser.R$id: int book_detail_tags_container
+com.nietky.librarythingbrowser.R$id: int book_detail_title
+com.nietky.librarythingbrowser.R$id: int book_list_item_subtitle
+com.nietky.librarythingbrowser.R$id: int book_list_item_title
+com.nietky.librarythingbrowser.R$id: int book_list_item_verticalright
+com.nietky.librarythingbrowser.R$id: int collectionListView
+com.nietky.librarythingbrowser.R$id: int commentListView
+com.nietky.librarythingbrowser.R$id: int commentlist_item_author
+com.nietky.librarythingbrowser.R$id: int commentlist_item_comments
+com.nietky.librarythingbrowser.R$id: int commentlist_item_comments_private
+com.nietky.librarythingbrowser.R$id: int commentlist_item_comments_private_left_icon
+com.nietky.librarythingbrowser.R$id: int commentlist_item_comments_private_vertical_ll
+com.nietky.librarythingbrowser.R$id: int commentlist_item_title
+com.nietky.librarythingbrowser.R$id: int debug_log_button
+com.nietky.librarythingbrowser.R$id: int debug_log_clear
+com.nietky.librarythingbrowser.R$id: int debug_log_message
+com.nietky.librarythingbrowser.R$id: int debug_log_text
+com.nietky.librarythingbrowser.R$id: int debug_log_text3
+com.nietky.librarythingbrowser.R$id: int debug_log_view_log
+com.nietky.librarythingbrowser.R$id: int login_lt_password
+com.nietky.librarythingbrowser.R$id: int login_lt_remember_credentials
+com.nietky.librarythingbrowser.R$id: int login_lt_username
+com.nietky.librarythingbrowser.R$id: int menuAuthors
+com.nietky.librarythingbrowser.R$id: int menuCollections
+com.nietky.librarythingbrowser.R$id: int menuComments
+com.nietky.librarythingbrowser.R$id: int menuDelete
+com.nietky.librarythingbrowser.R$id: int menuImport
+com.nietky.librarythingbrowser.R$id: int menuPreferences
+com.nietky.librarythingbrowser.R$id: int menuReviews
+com.nietky.librarythingbrowser.R$id: int menuScanBarcode
+com.nietky.librarythingbrowser.R$id: int menuSearch
+com.nietky.librarythingbrowser.R$id: int menuShowAllBooks
+com.nietky.librarythingbrowser.R$id: int menuTags
+com.nietky.librarythingbrowser.R$id: int reviewListView
+com.nietky.librarythingbrowser.R$id: int reviewlist_item_author
+com.nietky.librarythingbrowser.R$id: int reviewlist_item_review
+com.nietky.librarythingbrowser.R$id: int reviewlist_item_title
+com.nietky.librarythingbrowser.R$id: int tagListView
+com.nietky.librarythingbrowser.R$layout: int activity_author_list
+com.nietky.librarythingbrowser.R$layout: int activity_book_detail
+com.nietky.librarythingbrowser.R$layout: int activity_book_list
+com.nietky.librarythingbrowser.R$layout: int activity_collection_list
+com.nietky.librarythingbrowser.R$layout: int activity_commentlist
+com.nietky.librarythingbrowser.R$layout: int activity_debug_log
+com.nietky.librarythingbrowser.R$layout: int activity_login
+com.nietky.librarythingbrowser.R$layout: int activity_reviewlist
+com.nietky.librarythingbrowser.R$layout: int activity_tag_list
+com.nietky.librarythingbrowser.R$layout: int book_list_item
+com.nietky.librarythingbrowser.R$layout: int commentlist_item
+com.nietky.librarythingbrowser.R$layout: int reviewlist_item
+com.nietky.librarythingbrowser.R$menu: int activity_author_list
+com.nietky.librarythingbrowser.R$menu: int activity_collection_list
+com.nietky.librarythingbrowser.R$menu: int activity_main
+com.nietky.librarythingbrowser.R$menu: int activity_tag_list
+com.nietky.librarythingbrowser.R$menu: int comment_list
+com.nietky.librarythingbrowser.R$menu: int debug_log
+com.nietky.librarythingbrowser.R$menu: int login
+com.nietky.librarythingbrowser.R$menu: int options
+com.nietky.librarythingbrowser.R$menu: int review_list
+com.nietky.librarythingbrowser.R$string: int action_settings
+com.nietky.librarythingbrowser.R$string: int app_name
+com.nietky.librarythingbrowser.R$string: int authorlist_ui_authors
+com.nietky.librarythingbrowser.R$string: int comments_ui_title
+com.nietky.librarythingbrowser.R$string: int debug_log
+com.nietky.librarythingbrowser.R$string: int details_ui_authors_dummy
+com.nietky.librarythingbrowser.R$string: int details_ui_collections_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_comments_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_date_acquired_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_date_ended_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_date_entered_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_date_started_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_private_comments_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_publication_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_review_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_tags_preface
+com.nietky.librarythingbrowser.R$string: int details_ui_title_dummy
+com.nietky.librarythingbrowser.R$string: int hello_world
+com.nietky.librarythingbrowser.R$string: int login_ui_download_button
+com.nietky.librarythingbrowser.R$string: int login_ui_lt_password_hint
+com.nietky.librarythingbrowser.R$string: int login_ui_lt_username_hint
+com.nietky.librarythingbrowser.R$string: int login_ui_remember_credentials
+com.nietky.librarythingbrowser.R$string: int login_ui_title
+com.nietky.librarythingbrowser.R$string: int menu_authors
+com.nietky.librarythingbrowser.R$string: int menu_collections
+com.nietky.librarythingbrowser.R$string: int menu_comments
+com.nietky.librarythingbrowser.R$string: int menu_delete
+com.nietky.librarythingbrowser.R$string: int menu_download
+com.nietky.librarythingbrowser.R$string: int menu_reviews
+com.nietky.librarythingbrowser.R$string: int menu_scan_barcode
+com.nietky.librarythingbrowser.R$string: int menu_search
+com.nietky.librarythingbrowser.R$string: int menu_settings
+com.nietky.librarythingbrowser.R$string: int menu_show_all_books
+com.nietky.librarythingbrowser.R$string: int menu_tags
+com.nietky.librarythingbrowser.R$string: int preferences_ui_about
+com.nietky.librarythingbrowser.R$string: int preferences_ui_attributions
+com.nietky.librarythingbrowser.R$string: int preferences_ui_details
+com.nietky.librarythingbrowser.R$string: int preferences_ui_jcsv
+com.nietky.librarythingbrowser.R$string: int preferences_ui_jcsv_licence
+com.nietky.librarythingbrowser.R$string: int preferences_ui_last_download_initial_summary
+com.nietky.librarythingbrowser.R$string: int preferences_ui_last_download_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_launcher
+com.nietky.librarythingbrowser.R$string: int preferences_ui_launcher_source
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_credentials
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_password_dialog_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_password_hint
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_password_summary
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_password_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_username_dialog_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_username_hint
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_username_summary
+com.nietky.librarythingbrowser.R$string: int preferences_ui_lt_username_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_no_affiliation
+com.nietky.librarythingbrowser.R$string: int preferences_ui_search_publication_summary_off
+com.nietky.librarythingbrowser.R$string: int preferences_ui_search_publication_summary_on
+com.nietky.librarythingbrowser.R$string: int preferences_ui_search_publication_title
+com.nietky.librarythingbrowser.R$string: int preferences_ui_version
+com.nietky.librarythingbrowser.R$string: int preferences_ui_version_unknown
+com.nietky.librarythingbrowser.R$string: int prefs_ui_case_sensitive_search_summary_off
+com.nietky.librarythingbrowser.R$string: int prefs_ui_case_sensitive_search_summary_on
+com.nietky.librarythingbrowser.R$string: int prefs_ui_case_sensitive_search_title
+com.nietky.librarythingbrowser.R$string: int prefs_ui_debug_log_summary
+com.nietky.librarythingbrowser.R$string: int reviews_ui_title
+com.nietky.librarythingbrowser.R$string: int search_hint
+com.nietky.librarythingbrowser.R$string: int search_label
+com.nietky.librarythingbrowser.R$string: int title_activity_author_list
+com.nietky.librarythingbrowser.R$string: int title_activity_collection_list
+com.nietky.librarythingbrowser.R$string: int title_activity_comment_list
+com.nietky.librarythingbrowser.R$string: int title_activity_debug_log
+com.nietky.librarythingbrowser.R$string: int title_activity_login
+com.nietky.librarythingbrowser.R$string: int title_activity_preferences
+com.nietky.librarythingbrowser.R$string: int title_activity_review_list
+com.nietky.librarythingbrowser.R$string: int title_activity_tag_list
+com.nietky.librarythingbrowser.R$string: int title_book_detail
+com.nietky.librarythingbrowser.R$string: int title_book_list
+com.nietky.librarythingbrowser.R$string: int title_section1
+com.nietky.librarythingbrowser.R$string: int title_section2
+com.nietky.librarythingbrowser.R$string: int topbar_allbooks
+com.nietky.librarythingbrowser.R$string: int topbar_author
+com.nietky.librarythingbrowser.R$string: int topbar_collection
+com.nietky.librarythingbrowser.R$string: int topbar_search
+com.nietky.librarythingbrowser.R$string: int topbar_tag
+com.nietky.librarythingbrowser.R$style: int AppTheme
+com.nietky.librarythingbrowser.R$xml: int preferences
+com.nietky.librarythingbrowser.R$xml: int searchable
+com.nietky.librarythingbrowser.ReviewListActivity
+com.nietky.librarythingbrowser.ReviewListActivity: ReviewListActivity()
+com.nietky.librarythingbrowser.TagListActivity
+com.nietky.librarythingbrowser.TagListActivity: TagListActivity()
