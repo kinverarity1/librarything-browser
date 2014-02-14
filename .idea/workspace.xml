@@ -7,12 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a414b9c9-5f62-45bc-8503-6dc56f314e45" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/librarything-browser.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/libs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/APKs/LibraryThingBrowser_1.8vc29-beta.apk" afterPath="$PROJECT_DIR$/APKs/LibraryThingBrowser_1.8vc29-beta.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/nietky/librarythingbrowser/BookListActivity.java" afterPath="$PROJECT_DIR$/src/com/nietky/librarythingbrowser/BookListActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NEWS" afterPath="$PROJECT_DIR$/NEWS" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="librarything-browser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -97,7 +92,7 @@
       <file leaf-file-name="NEWS" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/NEWS">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="51" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.61218834" vertical-offset="68" max-vertical-offset="544">
+            <state line="17" column="51" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.518851" vertical-offset="0" max-vertical-offset="557">
               <folding />
             </state>
           </provider>
@@ -234,7 +229,7 @@
     <property name="SearchEverywhereHistory" value="BooListActivity" />
     <property name="FullScreen" value="false" />
     <property name="ExportedModule" value="librarything-browser" />
-    <property name="ExportedApkPath" value="C:\Users\Kent\code\android-studio-projects\librarything-browser\APKs\LibraryThingBrowser_1.8vc29-beta.apk" />
+    <property name="ExportedApkPath" value="C:\Users\Kent\code\android-studio-projects\librarything-browser\APKs\LibraryThingBrowser_1.8.6vc35.apk" />
     <property name="AndroidRunProguardForReleaseBuild" value="true" />
     <property name="AndroidProguardConfigPaths" value="C:\Users\Kent\AppData\Local\Android\android-studio\sdk\tools\proguard\proguard-android.txt;C:\Users\Kent\code\android-studio-projects\librarything-browser\proguard-project.txt" />
   </component>
@@ -399,7 +394,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="10" y="0" width="1346" height="728" extended-state="0" />
+    <frame x="10" y="0" width="1346" height="728" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -412,7 +407,7 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -469,7 +464,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/NEWS">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="51" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.61218834" vertical-offset="68" max-vertical-offset="544">
+        <state line="17" column="51" selection-start="1156" selection-end="1156" vertical-scroll-proportion="0.518851" vertical-offset="0" max-vertical-offset="557">
           <folding />
         </state>
       </provider>
